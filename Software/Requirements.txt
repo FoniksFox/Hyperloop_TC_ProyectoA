@@ -1,0 +1,21 @@
+# Essential
+
+## Frontend
+* Desarrollo en React
+* Comunicaciones por WebSocket
+* Disposición en columnas
+* Gráficas
+* Botones
+* Consola de comandos
+
+## Backend
+* Por determinar, está la opción de pedirlo ya hecho
+
+# Optional
+
+## Frontend
+* Añadir cosas extra
+* Identificar vuestras necesidades
+
+## Backend
+* Por determinar
