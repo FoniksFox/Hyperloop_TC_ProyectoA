@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/Home'
 import Dev from './pages/Dev/Dev'
 
+// TODO: Create a WebSocket hook and wrapper to clean up the code
 import { logMessage } from './components/Console/Console'
 import { updateSensorData } from './components/Charts/Charts'
 
