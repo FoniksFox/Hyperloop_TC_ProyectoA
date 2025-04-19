@@ -21,7 +21,7 @@ async def websocket_handler(websocket):
     logging.info(f"New connection from {websocket.remote_address}")
     try:
         while True:
-
+            initial_time = asyncio.get_event_loop().time()
             try:
                 command = await asyncio.wait_for(websocket.recv(), timeout=TICK)
                 logging.info(f"Command: {command}")
@@ -40,8 +40,10 @@ async def websocket_handler(websocket):
             except Exception as e:
                 logging.error(f"Error sending packet: {e}")
                 break
-
-            await asyncio.sleep(TICK)  # Sleep for TICK seconds before sending the next command
+            
+            time_to_wait = TICK - (asyncio.get_event_loop().time() - initial_time)
+            if time_to_wait > 0:
+                await asyncio.sleep(time_to_wait)
             
     except websockets.ConnectionClosed:
         logging.info(f"Connection closed by {websocket.remote_address}")
