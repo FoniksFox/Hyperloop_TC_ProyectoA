@@ -1,8 +1,14 @@
+import sys
+import os
+
+# Add the backend directory to the sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import websockets
 import asyncio
 import json
 import logging
-from .simulator import get_packet, process_command
+from backend.simulator import get_packet, process_command
 
 TICK = 0.1  # 100 ms
 
