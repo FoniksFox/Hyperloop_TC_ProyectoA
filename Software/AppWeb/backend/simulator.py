@@ -1,5 +1,6 @@
 import logging
 import asyncio
+import json
 
 
 # Simulation state variables
@@ -28,19 +29,35 @@ async def get_packet():
 async def process_command(command):
     # Simulate command processing and state changes
     global state, voltage, elevation, current, velocity, response
-    if command:
-        if command == "precharge":
+
+    try:
+        command = json.loads(command)
+        cmd = command.get("id", "").lower()
+        # Process commands only if valid in the current state.
+        if cmd == "precharge" and state == "initial":
+            logging.info("Command 'precharge' received.")
             state = "precharging"
-        elif command == "start levitation":
+        elif cmd == "start levitation" and state == "precharged":
+            logging.info("Command 'start levitation' received.")
             state = "levitating"
-        elif command == "start motor":
+        elif cmd == "start motor" and state == "levitated":
+            logging.info("Command 'start motor' received.")
             state = "motor_starting"
-        elif command == "stop motor":
+        elif cmd == "stop motor" and state == "cruising":
+            logging.info("Command 'stop motor' received.")
             state = "motor_stopping"
-        elif command == "stop levitation":
+        elif cmd == "stop levitation" and state == "levitated":
+            logging.info("Command 'stop levitation' received.")
             state = "levitation_stopping"
-        elif command == "discharge":
+        elif cmd == "discharge" and state == "precharged":
+            logging.info("Command 'discharge' received.")
             state = "discharging"
+        else:
+            logging.info(f"Ignored command '{cmd}' in state '{state}'")
+            cmd = None  # Ignore invalid commands
+    except Exception as e:
+        logging.info("Error processing command:", e)
+        cmd = None  # Ignore invalid commands
 
     if state == "precharging":
         voltage += 10  # Increase voltage by 10 V per tick
