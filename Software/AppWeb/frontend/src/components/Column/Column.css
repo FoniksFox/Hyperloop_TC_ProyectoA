@@ -1,0 +1,21 @@
+.column {
+    position: relative;  /* needed for the pseudo-element positioning */
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    z-index: 1;
+}
+
+.column::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    background-color: #ff00ea34;
+    border-radius: 6px; /* adjust to suit your design */
+    z-index: -1;  /* place behind the content */
+}
