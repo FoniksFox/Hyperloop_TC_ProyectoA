@@ -1,5 +1,5 @@
 import './ColumnsContainer.css';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 import Column from '../Column/Column.jsx';
 
@@ -18,21 +18,34 @@ function ColumnsContainer() {
             for (let entry of entries) {
                 if (entry.target === containerRef.current) {
                     let containerWidth = entry.contentRect.width;
-                    let newWidths = columns.map((column, index) => {
-                        if (column.visible) {
+                    let newWidths = columns.filter(column => column.visible).map((column, index) => {
                             const columnElement = columnsRef.current[index];
                             const width = columnElement.getBoundingClientRect().width;
                             return (width / containerWidth) * 100; // Convert to percentage
-                        } else {
-                            return 0;
-                        }
                     });
                     // Ensure that the widths sum to 100%
                     const totalWidth = newWidths.reduce((acc, width) => acc + width, 0);
                     if (totalWidth > 0) {
                         newWidths = newWidths.map(width => (width / totalWidth) * 100); // Normalize to 100%
                     }
-                    setColumns(prevColumns => prevColumns.map((column, index) => ({ ...column, width: newWidths[index] })));
+                    let newColumns = columns.filter(column => column.visible).map((column, i) => ({ ...column, width: newWidths[i] }));
+                    // Add the hidden columns
+                    const hiddenColumns = columns.filter(column => !column.visible);
+                    newColumns = newColumns.concat(hiddenColumns);
+                    const columnsEqual = (cols1, cols2) => {
+                        if (cols1.length !== cols2.length) return false;
+                        for (let i = 0; i < cols1.length; i++) {
+                            const a = cols1[i];
+                            const b = cols2[i];
+                            if (a.id !== b.id || a.visible !== b.visible || a.width !== b.width) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    };
+                    if (!columnsEqual(newColumns, columns)) {
+                        setColumns(newColumns);
+                    }
                 }
             }
         });
@@ -40,10 +53,10 @@ function ColumnsContainer() {
         return () => {
             observer.disconnect();
         }
-    }, []);
+    }, [columns]);
     
 
-    const startResize = (event, direction) => {
+    const startResize = useCallback((event, direction) => {
         event.preventDefault();
         const target = event.target;
         const index = parseInt(target.getAttribute('data-index'));
@@ -84,16 +97,16 @@ function ColumnsContainer() {
 
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mouseup', onMouseUp);
-    };
+    });
 
-	const startResizeLeft = (event) => {
+	const startResizeLeft = useCallback((event) => {
 		startResize(event, 'left');
-	}
-	const startResizeRight = (event) => {
+	});
+	const startResizeRight = useCallback((event) => {
 		startResize(event, 'right');
-	}
+	});
 
-    const toggleColumnVisibility = (columnId) => {
+    const toggleColumnVisibility = useCallback((columnId) => {
         // Resize the columns to fit the new layout
         let newColumns = columns.map(column => {
             if (column.id === columnId) {
@@ -103,33 +116,43 @@ function ColumnsContainer() {
         });
         const totalWidth = newColumns.reduce((acc, column) => acc + (column.visible ? column.width : 0), 0);
         newColumns = newColumns.map(column => {
-            if (column.id === columnId) {
-                return { ...column, width: 0 };
-            }
-            return { ...column, width: column.width / totalWidth * 100};
+            if (!column.visible) return {...column, width: 0};
+            else return { ...column, width: column.width / totalWidth * 100};
         });
         setColumns(newColumns);
-    }
+    });
 
     return (
-        <div className="columns-container" ref={containerRef}>
-            {columns.filter(column => column.visible).map((column, index) => (
-                <div
-                    key={column.id}
-                    ref={el => columnsRef.current[index] = el}
-                    className={`column-${column.visible ? 'visible' : 'hidden'}`}
-                    style={{ width: `${column.width}%` }}
-                >
-                    {index === 0 ? null : (
-                        <div className="resize-handle" onMouseDown={startResizeLeft} data-index={index}/>
-                    )}
-                    <Column id={column.id} onToggleVisibility={toggleColumnVisibility}>
-                    </Column>
-                    {index === columns.filter(column => column.visible).length - 1 ? null : (
-                        <div className="resize-handle" onMouseDown={startResizeRight} data-index={index}/>
-                    )}
+        <div className="columns-container-wrapper">
+            <div className="columns-container" ref={containerRef}>
+                {columns.filter(column => column.visible).map((column, index) => (
+                    <div
+                        key={column.id}
+                        ref={el => columnsRef.current[index] = el}
+                        className={`column-${column.visible ? 'visible' : 'hidden'}`}
+                        style={{ width: `${column.width}%` }}
+                    >
+                        {index === 0 ? null : (
+                            <div className="resize-handle" onMouseDown={startResizeLeft} data-index={index}/>
+                        )}
+                        <Column id={column.id} onToggleVisibility={toggleColumnVisibility}>
+                        </Column>
+                        {index === columns.filter(column => column.visible).length - 1 ? null : (
+                            <div className="resize-handle" onMouseDown={startResizeRight} data-index={index}/>
+                        )}
+                    </div>
+                ))}
+            </div>
+            {columns.filter(column => !column.visible).length > 0 ? 
+                <div className="columns-container-minimized">
+                    {columns.filter(column => !column.visible).map((column, index) => (
+                        <div key={column.id} className="column-hidden" onClick={() => toggleColumnVisibility(column.id)}>
+                            {column.id.charAt(0).toUpperCase() + column.id.slice(1)}
+                        </div>
+                    ))}
                 </div>
-            ))}
+                : null
+            }
         </div>
     );
 }
