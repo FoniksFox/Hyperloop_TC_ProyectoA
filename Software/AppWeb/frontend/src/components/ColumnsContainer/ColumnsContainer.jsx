@@ -18,7 +18,7 @@ function ColumnsContainer() {
             for (let entry of entries) {
                 if (entry.target === containerRef.current) {
                     let containerWidth = entry.contentRect.width;
-                    const newWidths = columns.map((column, index) => {
+                    let newWidths = columns.map((column, index) => {
                         if (column.visible) {
                             const columnElement = columnsRef.current[index];
                             const width = columnElement.getBoundingClientRect().width;
@@ -30,7 +30,7 @@ function ColumnsContainer() {
                     // Ensure that the widths sum to 100%
                     const totalWidth = newWidths.reduce((acc, width) => acc + width, 0);
                     if (totalWidth > 0) {
-                        const newWidths = newWidths.map(width => (width / totalWidth) * 100); // Normalize to 100%
+                        newWidths = newWidths.map(width => (width / totalWidth) * 100); // Normalize to 100%
                     }
                     setColumns(prevColumns => prevColumns.map((column, index) => ({ ...column, width: newWidths[index] })));
                 }
