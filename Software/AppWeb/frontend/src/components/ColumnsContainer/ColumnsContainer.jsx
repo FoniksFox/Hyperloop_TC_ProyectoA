@@ -1,30 +1,55 @@
 import './ColumnsContainer.css';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import Column from '../Column/Column.jsx';
 
 // Handle resizing, closing and opening of the columns (when minimized, they appear at the bottom of the screen as a bar)
 function ColumnsContainer() {
+    const containerRef = useRef(null);
+    const columnsRef = useRef(Array(3).fill(null)); // Array to hold references to the column elements
     const [columns, setColumns] = useState([
-        { id: 'charts', visible: true, width: 33 },
-        { id: 'buttons', visible: true, width: 34 },
-        { id: 'console', visible: true, width: 33 }
+        { id: 'charts', visible: true, width: 33},
+        { id: 'buttons', visible: true, width: 34},
+        { id: 'console', visible: true, width: 33},
     ]);
+    
+    useEffect(() => {
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                if (entry.target === containerRef.current) {
+                    let containerWidth = entry.contentRect.width;
+                    const newWidths = columns.map((column, index) => {
+                        if (column.visible) {
+                            const columnElement = columnsRef.current[index];
+                            const width = columnElement.getBoundingClientRect().width;
+                            return (width / containerWidth) * 100; // Convert to percentage
+                        } else {
+                            return 0;
+                        }
+                    });
+                    setColumns(prevColumns => prevColumns.map((column, index) => ({ ...column, width: newWidths[index] })));
+                }
+            }
+        });
+        observer.observe(containerRef.current);
+        return () => {
+            observer.disconnect();
+        }
+    }, []);
+    
 
     const startResize = (event, direction) => {
         event.preventDefault();
         const target = event.target;
-        const columnElement = target.parentNode;
-        // Use dataset for robust index retrieval
         const index = parseInt(target.getAttribute('data-index'));
-        const minWidth = 15; // Min width (percentage)
-        const maxWidth = 100; // Max width (percentage)
         // Capture initial widths so that the resizing is relative to the starting values
         const initialWidths = columns.filter(column => column.visible).map(column => column.width);
 
         // Get container element (assumes parent of a column is the container)
-        const container = columnElement.parentNode;
-        const containerRect = container.getBoundingClientRect();
+        const container = containerRef.current;
+        const containerWidth = container.getBoundingClientRect().width - parseFloat(window.getComputedStyle(container).paddingLeft) - parseFloat(window.getComputedStyle(container).paddingRight);
+        const minWidth = 200 / containerWidth * 100; // Minimum width (percentage) based on the container's width
+        const maxWidth = 100; // Max width (percentage)
 
         // Capture initial mouse position and the current width (as percentage) of the target column.
         const initialMouseX = event.clientX;
@@ -33,10 +58,9 @@ function ColumnsContainer() {
         const onMouseMove = (moveEvent) => {
             // Calculate delta
             const deltaX = moveEvent.clientX - initialMouseX;
-            const deltaPercent = (deltaX / containerRect.width) * 100;
+            const deltaPercent = (deltaX / containerWidth) * 100;
 
             let newWidth = direction === 'left' ? initialWidth - deltaPercent : initialWidth + deltaPercent;
-			
             const newWidths = handleResize(initialWidths, index, newWidth, minWidth, maxWidth, direction);
             let newColumns = columns.filter(column => column.visible).map((column, i) => ({ ...column, width: newWidths[i] }));
             // Add the widths of the hidden columns to the visible ones
@@ -83,21 +107,24 @@ function ColumnsContainer() {
     }
 
     return (
-        <div className="columns-container">
-            {columns.filter(column => column.visible).map((column, index) => {
-                return (
-                    <div key={column.id} className={`column-${column.visible ? 'visible' : 'hidden'}`} style={{ width: `${column.width}%` }}>
-                        {index === 0 ? null : (
-                            <div className="resize-handle" onMouseDown={startResizeLeft} data-index={index}/>
-                        )}
-                        <Column id={column.id} onToggleVisibility={toggleColumnVisibility}>
-                        </Column>
-                        {index === columns.filter(column => column.visible).length - 1 ? null : (
-                            <div className="resize-handle" onMouseDown={startResizeRight} data-index={index}/>
-                        )}
-                    </div>
-                );
-            })}
+        <div className="columns-container" ref={containerRef}>
+            {columns.filter(column => column.visible).map((column, index) => (
+                <div
+                    key={column.id}
+                    ref={el => columnsRef.current[index] = el}
+                    className={`column-${column.visible ? 'visible' : 'hidden'}`}
+                    style={{ width: `${column.width}%` }}
+                >
+                    {index === 0 ? null : (
+                        <div className="resize-handle" onMouseDown={startResizeLeft} data-index={index}/>
+                    )}
+                    <Column id={column.id} onToggleVisibility={toggleColumnVisibility}>
+                    </Column>
+                    {index === columns.filter(column => column.visible).length - 1 ? null : (
+                        <div className="resize-handle" onMouseDown={startResizeRight} data-index={index}/>
+                    )}
+                </div>
+            ))}
         </div>
     );
 }
