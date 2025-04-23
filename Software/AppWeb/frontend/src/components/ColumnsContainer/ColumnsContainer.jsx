@@ -27,6 +27,11 @@ function ColumnsContainer() {
                             return 0;
                         }
                     });
+                    // Ensure that the widths sum to 100%
+                    const totalWidth = newWidths.reduce((acc, width) => acc + width, 0);
+                    if (totalWidth > 0) {
+                        const newWidths = newWidths.map(width => (width / totalWidth) * 100); // Normalize to 100%
+                    }
                     setColumns(prevColumns => prevColumns.map((column, index) => ({ ...column, width: newWidths[index] })));
                 }
             }
