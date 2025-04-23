@@ -20,6 +20,7 @@ function ColumnsContainer() {
                     let containerWidth = entry.contentRect.width;
                     let newWidths = columns.filter(column => column.visible).map((column, index) => {
                             const columnElement = columnsRef.current[index];
+                            if (!columnElement) return 0; // Skip if the column element is not available
                             const width = columnElement.getBoundingClientRect().width;
                             return (width / containerWidth) * 100; // Convert to percentage
                     });
