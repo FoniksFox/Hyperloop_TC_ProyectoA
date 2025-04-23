@@ -21,6 +21,7 @@ function ColumnsContainer() {
                     let newWidths = columns.map((column, index) => {
                         if (column.visible) {
                             const columnElement = columnsRef.current[index];
+                            if (!columnElement) return 0; // Skip if the column element is not available
                             const width = columnElement.getBoundingClientRect().width;
                             return (width / containerWidth) * 100; // Convert to percentage
                         } else {
@@ -32,7 +33,14 @@ function ColumnsContainer() {
                     if (totalWidth > 0) {
                         newWidths = newWidths.map(width => (width / totalWidth) * 100); // Normalize to 100%
                     }
-                    setColumns(prevColumns => prevColumns.map((column, index) => ({ ...column, width: newWidths[index] })));
+                    setColumns(prevColumns => prevColumns.map((column, index) => {
+                        if (column.visible) {
+                            return { ...column, width: newWidths[index] };
+                        } else {
+                            return { ...column, width: column.width }; // Keep the width of hidden columns unchanged
+                        }
+                    }));
+
                 }
             }
         });
@@ -104,7 +112,7 @@ function ColumnsContainer() {
         const totalWidth = newColumns.reduce((acc, column) => acc + (column.visible ? column.width : 0), 0);
         newColumns = newColumns.map(column => {
             if (column.id === columnId) {
-                return { ...column, width: 0 };
+                return column;
             }
             return { ...column, width: column.width / totalWidth * 100};
         });
