@@ -1,16 +1,14 @@
 import './ColumnsContainer.css';
 import { useState } from 'react';
 
-import ChartColumn from '../ChartColumn/ChartColumn.jsx';
-import ButtonColumn from '../ButtonColumn/ButtonColumn.jsx';
-import ConsoleColumn from '../ConsoleColumn/ConsoleColumn.jsx';
+import Column from '../Column/Column.jsx';
 
 // Handle resizing, closing and opening of the columns (when minimized, they appear at the bottom of the screen as a bar)
 function ColumnsContainer() {
     const [columns, setColumns] = useState([
-        { id: 'charts', component: ChartColumn, visible: true, width: 33 },
-        { id: 'buttons', component: ButtonColumn, visible: true, width: 34 },
-        { id: 'console', component: ConsoleColumn, visible: true, width: 33 }
+        { id: 'charts', visible: true, width: 33 },
+        { id: 'buttons', visible: true, width: 34 },
+        { id: 'console', visible: true, width: 33 }
     ]);
 
     const startResize = (event, direction) => {
@@ -87,14 +85,14 @@ function ColumnsContainer() {
     return (
         <div className="columns-container">
             {columns.filter(column => column.visible).map((column, index) => {
-                const ColumnComponent = column.component;
                 return (
                     <div key={column.id} className={`column-${column.visible ? 'visible' : 'hidden'}`} style={{ width: `${column.width}%` }}>
                         {index === 0 ? null : (
                             <div className="resize-handle" onMouseDown={startResizeLeft} data-index={index}/>
                         )}
-                        <ColumnComponent />
-                        {index === columns.length - 1 ? null : (
+                        <Column id={column.id} onToggleVisibility={toggleColumnVisibility}>
+                        </Column>
+                        {index === columns.filter(column => column.visible).length - 1 ? null : (
                             <div className="resize-handle" onMouseDown={startResizeRight} data-index={index}/>
                         )}
                     </div>

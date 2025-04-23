@@ -1,10 +1,13 @@
 import './Column.css';
 
-function Column() {
+function Column({ onToggleVisibility, id, className, header, children }) {
+    if (!className) className = id;
+    if (!header) header = id.charAt(0).toUpperCase() + id.slice(1);
     return (
-        <div className="column">
-            <div className="column-header">Column Header</div>
-            <div className="column-content">Column Content</div>
+        <div className={`column ${className}`}>
+            <div className="column-header">{header}</div>
+            <button className="toggle-button" onClick={() => onToggleVisibility(id)}>Toggle Visibility</button>
+            <div className="column-content">{children}</div>
         </div>
     );
 }
