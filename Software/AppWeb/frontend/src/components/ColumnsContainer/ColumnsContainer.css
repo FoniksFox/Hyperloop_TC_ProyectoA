@@ -12,6 +12,10 @@
     background-clip: content-box;
 }
 
+.column-hidden {
+    display: none;
+}
+
 .resize-handle {
     width: 10px;
     margin: 0px 3px;

@@ -22,7 +22,7 @@ function ColumnsContainer() {
         const minWidth = 15; // Min width (percentage)
         const maxWidth = 100; // Max width (percentage)
         // Capture initial widths so that the resizing is relative to the starting values
-        const initialWidths = columns.map(column => column.width);
+        const initialWidths = columns.filter(column => column.visible).map(column => column.width);
 
         // Get container element (assumes parent of a column is the container)
         const container = columnElement.parentNode;
@@ -40,7 +40,10 @@ function ColumnsContainer() {
             let newWidth = direction === 'left' ? initialWidth - deltaPercent : initialWidth + deltaPercent;
 			
             const newWidths = handleResize(initialWidths, index, newWidth, minWidth, maxWidth, direction);
-            const newColumns = columns.map((column, i) => ({ ...column, width: newWidths[i] }));
+            let newColumns = columns.filter(column => column.visible).map((column, i) => ({ ...column, width: newWidths[i] }));
+            // Add the widths of the hidden columns to the visible ones
+            const hiddenColumns = columns.filter(column => !column.visible).map(column => ({...column, width: 0 }));
+            newColumns = newColumns.concat(hiddenColumns);
             setColumns(newColumns);
         };
 
@@ -63,9 +66,27 @@ function ColumnsContainer() {
 		startResize(event, 'right');
 	}
 
+    const toggleColumnVisibility = (columnId) => {
+        // Resize the columns to fit the new layout
+        let newColumns = columns.map(column => {
+            if (column.id === columnId) {
+                return { ...column, visible: !column.visible };
+            }
+            return column;
+        });
+        const totalWidth = newColumns.reduce((acc, column) => acc + (column.visible ? column.width : 0), 0);
+        newColumns = newColumns.map(column => {
+            if (column.id === columnId) {
+                return { ...column, width: 0 };
+            }
+            return { ...column, width: column.width / totalWidth * 100};
+        });
+        setColumns(newColumns);
+    }
+
     return (
         <div className="columns-container">
-            {columns.map((column, index) => {
+            {columns.filter(column => column.visible).map((column, index) => {
                 const ColumnComponent = column.component;
                 return (
                     <div key={column.id} className={`column-${column.visible ? 'visible' : 'hidden'}`} style={{ width: `${column.width}%` }}>
