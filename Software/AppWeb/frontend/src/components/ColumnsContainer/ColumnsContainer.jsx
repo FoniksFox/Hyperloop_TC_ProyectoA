@@ -170,10 +170,13 @@ function ColumnsContainer() {
         });
 
         // Make all the other columns invisible and disable pointer events
-        columnsRef.current.forEach((col) => {
+        columnsRef.current.forEach((col, i) => {
             if (col) {
                 col.style.visibility = 'hidden'; // Make the other columns transparent
                 col.style.pointerEvents = 'none'; // Disable pointer events on the other columns
+                if (i !== index) {
+                    col.style.opacity = 0.5; // Make the other columns transparent
+                }
             }
         });
 
@@ -238,6 +241,7 @@ function ColumnsContainer() {
                 if (col) {
                     col.style.visibility = 'visible'; // Make the other columns transparent
                     col.style.pointerEvents = 'auto'; // Enable pointer events on the other columns
+                    col.style.opacity = 1; // Make the other columns transparent
                 }
             });
             setColumns(columnsCopy); // Update the columns state

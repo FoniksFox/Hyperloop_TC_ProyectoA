@@ -48,6 +48,7 @@
 .toggle {
     cursor: pointer;
     background-color: transparent;
+    outline: none;
     border: none;
     font-weight: inherit;
     padding: 0px;
@@ -56,6 +57,10 @@
 }
 .toggle:hover {
     scale: 1.1;
+}
+.toggle:focus {
+    outline: none;
+    border: none;
 }
 
 .column-content {
