@@ -59,30 +59,28 @@ function ColumnsContainer() {
 
     const startResize = useCallback((event, direction) => {
         event.preventDefault();
-        document.documentElement.style.cursor = 'col-resize'; // Change cursor to resize
+        document.documentElement.style.cursor = 'col-resize';
         const target = event.target;
         const index = parseInt(target.getAttribute('data-index'));
-        // Capture initial widths so that the resizing is relative to the starting values
         const initialWidths = columns.filter(column => column.visible).map(column => column.width);
 
-        // Get container element (assumes parent of a column is the container)
         const container = containerRef.current;
-        const containerWidth = container.getBoundingClientRect().width - parseFloat(window.getComputedStyle(container).paddingLeft) - parseFloat(window.getComputedStyle(container).paddingRight);
-        const minWidth = 200 / containerWidth * 100; // Minimum width (percentage) based on the container's width
-        const maxWidth = 100; // Max width (percentage)
+        const containerWidth = container.getBoundingClientRect().width;
+        const minWidth = 200 / containerWidth * 100
+        const maxWidth = 100;
 
-        // Capture initial mouse position and the current width (as percentage) of the target column.
+        // Capture initial mouse position and current width of the target column.
         const initialMouseX = event.clientX;
         const initialWidth = initialWidths[index];
 
         const onMouseMove = (moveEvent) => {
-            // Calculate delta
             const deltaX = moveEvent.clientX - initialMouseX;
             const deltaPercent = (deltaX / containerWidth) * 100;
 
             let newWidth = direction === 'left' ? initialWidth - deltaPercent : initialWidth + deltaPercent;
             const newWidths = handleResize(initialWidths, index, newWidth, minWidth, maxWidth, direction);
             let newColumns = columns.filter(column => column.visible).map((column, i) => ({ ...column, width: newWidths[i] }));
+            
             // Add the widths of the hidden columns to the visible ones
             const hiddenColumns = columns.filter(column => !column.visible).map(column => ({...column, width: 0 }));
             newColumns = newColumns.concat(hiddenColumns);
@@ -102,13 +100,6 @@ function ColumnsContainer() {
         window.addEventListener('mouseup', onMouseUp);
     });
 
-	const startResizeLeft = useCallback((event) => {
-		startResize(event, 'left');
-	});
-	const startResizeRight = useCallback((event) => {
-		startResize(event, 'right');
-	});
-
     const toggleColumnVisibility = useCallback((columnId) => {
         // Resize the columns to fit the new layout
         let newColumns = columns.map(column => {
@@ -127,55 +118,50 @@ function ColumnsContainer() {
 
     const startReorder = useCallback((event, id) => {
         event.preventDefault();
-        document.documentElement.style.cursor = 'grabbing'; // Change cursor to grabbing
+        document.documentElement.style.cursor = 'grabbing';
         const column = columns.find(column => column.id === id);
-        let columnsCopy = [...columns]; // Create a copy of the columns array
+        let columnsCopy = [...columns];
         let index = columnsCopy.indexOf(column);
         let auxColumns = [];
         columnsRef.current.forEach((col, i) => {
             if (col) {
-                const initialX = col.getBoundingClientRect().left; // Center of the column
-                const initialY = col.getBoundingClientRect().top; // Center of the column
-                const columnWidth = col.getBoundingClientRect().width; // Width of the column
-                const columnHeight = col.getBoundingClientRect().height; // Height of the column
+                const initialX = col.getBoundingClientRect().left;
+                const initialY = col.getBoundingClientRect().top;
+                const columnWidth = col.getBoundingClientRect().width;
+                const columnHeight = col.getBoundingClientRect().height;
 
-                const auxColumn = col.cloneNode(true); // Clone the column element
+                const auxColumn = col.cloneNode(true);
                 auxColumn.className = 'column-dragging';
-                auxColumn.style.pointerEvents = 'none'; // Disable pointer events on the clone
-                auxColumn.style.position = 'absolute'; // Make it absolute to move it freely
-                auxColumn.style.left = `${initialX}px`; // Set the initial position
-                auxColumn.style.top = `${initialY}px`; // Set the initial top position
-                auxColumn.style.width = `${columnWidth}px`; // Set the width of the column
-                auxColumn.style.height = `${columnHeight}px`; // Set the height of the column
-                auxColumn.style.zIndex = 1; // Bring it to the front
-                auxColumn.style.opacity = 1; 
-                auxColumn.style.transition = 'top 0.1s ease-in-out';
+                auxColumn.style.left = `${initialX}px`;
+                auxColumn.style.top = `${initialY}px`;
+                auxColumn.style.width = `${columnWidth}px`;
+                auxColumn.style.height = `${columnHeight}px`;
                 if (i !== index) {
                     auxColumn.style.transition = 'left 0.1s ease-in-out, opacity 0.2s ease-in-out';
                 }
-                col.parentNode.appendChild(auxColumn); // Append the clone to the parent
-                auxColumns.push(auxColumn); // Store the clone in the array
+                col.parentNode.appendChild(auxColumn);
+                auxColumns.push(auxColumn);
             }
         });
         const auxColumn = auxColumns[index];
         const initialX = auxColumn.getBoundingClientRect().left;
-        const columnWidth = auxColumn.getBoundingClientRect().width; // Width of the column
+        const columnWidth = auxColumn.getBoundingClientRect().width;
 
-        auxColumn.style.zIndex = 1000; // Bring it to the front
+        auxColumn.style.zIndex = 1000;
         auxColumn.style.top = `${auxColumn.getBoundingClientRect().top - 10}px`;
         auxColumns.forEach((col, i) => {
             if (i !== index) {
-                col.style.opacity = 0.5; // Make the other columns transparent
+                col.style.opacity = 0.5;
             }
         });
 
-        // Make all the other columns invisible and disable pointer events
+        // Make all the original columns invisible and disable pointer events, as weel as change their opacity for later animation
         columnsRef.current.forEach((col, i) => {
             if (col) {
-                col.style.visibility = 'hidden'; // Make the other columns transparent
-                col.style.pointerEvents = 'none'; // Disable pointer events on the other columns
+                col.style.visibility = 'hidden';
+                col.style.pointerEvents = 'none';
                 if (i !== index) {
-                    col.style.opacity = 0.5; // Make the other columns transparent
+                    col.style.opacity = 0.5;
                 }
             }
         });
@@ -185,44 +171,38 @@ function ColumnsContainer() {
             const containerOffset = containerRef.current.getBoundingClientRect().left;
             const deltaX = moveEvent.clientX - initialMouseX;
             const newX = Math.min(Math.max(initialX + deltaX, containerRef.current.getBoundingClientRect().left), containerRef.current.getBoundingClientRect().right - columnWidth); // Ensure it doesn't go out of bounds
-            auxColumn.style.left = `${newX}px`; // Move the clone
+            auxColumn.style.left = `${newX}px`;
 
             // Check if reordering is needed
             const nextBoundingRect = auxColumns[index + 1] ? auxColumns[index + 1].getBoundingClientRect() : null;
             let nextMiddleX = 1000000000000;
             if (nextBoundingRect) {
-                const realLeft = containerOffset + columnsCopy.slice(0, index+1).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * (containerRef.current.getBoundingClientRect().width- parseFloat(window.getComputedStyle(containerRef.current).paddingLeft) - parseFloat(window.getComputedStyle(containerRef.current).paddingRight));
+                const realLeft = containerOffset + columnsCopy.slice(0, index+1).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * containerRef.current.getBoundingClientRect().width;
                 nextMiddleX = realLeft + nextBoundingRect.width / 2;
-
             }
             const prevBoundingRect = auxColumns[index - 1] ? auxColumns[index - 1].getBoundingClientRect() : null;
             let prevMiddleX = 0;
             if (prevBoundingRect) {
-                const realLeft = containerOffset + columnsCopy.slice(0, index-1).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * (containerRef.current.getBoundingClientRect().width- parseFloat(window.getComputedStyle(containerRef.current).paddingLeft) - parseFloat(window.getComputedStyle(containerRef.current).paddingRight));
+                const realLeft = containerOffset + columnsCopy.slice(0, index-1).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * containerRef.current.getBoundingClientRect().width;
                 prevMiddleX = realLeft + prevBoundingRect.width / 2;
             }
-
             let aux = 0;
-            if (nextMiddleX <= newX + columnWidth) {
-                // Move the column to the right
-                aux = 1;
-            }
-            if (prevMiddleX >= newX) {
-                // Move the column to the left
-                aux = -1;
-            }
+            if (nextMiddleX <= newX + columnWidth) aux = 1; 
+            if (prevMiddleX >= newX) aux = -1;
+
+            // Reorder the columns in the array
             if (aux !== 0) {
                 const movedColumn = auxColumns[index + aux];
                 auxColumns[index + aux] = auxColumns[index];
                 auxColumns[index] = movedColumn;
                 if (aux > 0) {
-                    const realLeft = containerOffset + columnsCopy.slice(0, index+1).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * (containerRef.current.getBoundingClientRect().width- parseFloat(window.getComputedStyle(containerRef.current).paddingLeft) - parseFloat(window.getComputedStyle(containerRef.current).paddingRight));
+                    const realLeft = containerOffset + columnsCopy.slice(0, index+1).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * containerRef.current.getBoundingClientRect().width;
                     const newLeft = realLeft - columnWidth;
-                    movedColumn.style.left = `${newLeft}px`; // Move the clone to the new position
+                    movedColumn.style.left = `${newLeft}px`;
                 } else {
-                    const realLeft = containerOffset + columnsCopy.slice(0, index-1).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * (containerRef.current.getBoundingClientRect().width- parseFloat(window.getComputedStyle(containerRef.current).paddingLeft) - parseFloat(window.getComputedStyle(containerRef.current).paddingRight));
+                    const realLeft = containerOffset + columnsCopy.slice(0, index-1).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * containerRef.current.getBoundingClientRect().width;
                     const newLeft = realLeft + columnWidth;
-                    movedColumn.style.left = `${newLeft}px`; // Move the clone to the new position
+                    movedColumn.style.left = `${newLeft}px`;
                 }
                 columnsCopy[index] = columnsCopy[index + aux];
                 columnsCopy[index + aux] = column;
@@ -230,26 +210,32 @@ function ColumnsContainer() {
             }
         };
         
-        const onMouseUp = (moveEvent) => {
+        const onMouseUp = () => {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('mouseup', onMouseUp);
             auxColumns.forEach((auxColumn) => {
-                auxColumn.parentNode.removeChild(auxColumn); // Remove the clone from the DOM
+                auxColumn.parentNode.removeChild(auxColumn);
             });
-            document.documentElement.style.cursor = ''; // Change cursor to grabbing
+            document.documentElement.style.cursor = '';
             columnsRef.current.forEach((col) => {
                 if (col) {
-                    col.style.visibility = 'visible'; // Make the other columns transparent
-                    col.style.pointerEvents = 'auto'; // Enable pointer events on the other columns
-                    col.style.opacity = 1; // Make the other columns transparent
+                    col.style.visibility = 'visible';
+                    col.style.pointerEvents = 'auto';
+                    col.style.opacity = 1;
                 }
             });
-            setColumns(columnsCopy); // Update the columns state
+            setColumns(columnsCopy);
         };
 
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mouseup', onMouseUp);
     })
+
+    const columnsContent = {
+        charts: <div>Charts Content</div>,
+        buttons: <div>Buttons Content</div>,
+        console: <div>Console Content</div>,
+    }
 
     return (
         <div className="columns-container-wrapper">
@@ -264,14 +250,15 @@ function ColumnsContainer() {
                         {index === 0 ?
                         (<div className="resize-handle-inactive"/>) 
                         : (
-                            <div className="resize-handle" onMouseDown={startResizeLeft} data-index={index}/>
+                            <div className="resize-handle" onMouseDown={(event) => startResize(event, 'left')} data-index={index}/>
                         )}
                         <Column id={column.id} onToggleVisibility={toggleColumnVisibility} onReorder={startReorder}>
+                            {columnsContent[column.id]}
                         </Column>
                         {index === columns.filter(column => column.visible).length - 1 ? 
                         (<div className="resize-handle-inactive"/>) 
                         : (
-                            <div className="resize-handle" onMouseDown={startResizeRight} data-index={index}/>
+                            <div className="resize-handle" onMouseDown={(event) => startResize(event, 'right')} data-index={index}/>
                         )}
                     </div>
                 ))}

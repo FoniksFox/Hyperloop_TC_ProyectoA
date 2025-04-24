@@ -60,10 +60,14 @@
 
 .column-dragging {
     display: flex;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
     flex-direction: row;
     align-items: center;
     background-clip: content-box;
     min-width: 200px;
+    transition: top 0.1s ease-in-out;
 }
 .column-dragging::before {
     content: "";
