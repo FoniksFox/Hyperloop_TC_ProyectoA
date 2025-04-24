@@ -59,6 +59,7 @@ function ColumnsContainer() {
 
     const startResize = useCallback((event, direction) => {
         event.preventDefault();
+        document.documentElement.style.cursor = 'col-resize'; // Change cursor to resize
         const target = event.target;
         const index = parseInt(target.getAttribute('data-index'));
         // Capture initial widths so that the resizing is relative to the starting values
@@ -94,6 +95,7 @@ function ColumnsContainer() {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('mouseup', onMouseUp);
             target.style.backgroundColor = 'rgba(0, 0, 0, 0)'; // Reset color
+            document.documentElement.style.cursor = ''; // Change cursor to grabbing
         };
 
         window.addEventListener('mousemove', onMouseMove);
@@ -124,6 +126,8 @@ function ColumnsContainer() {
     });
 
     const startReorder = useCallback((event, id) => {
+        event.preventDefault();
+        document.documentElement.style.cursor = 'grabbing'; // Change cursor to grabbing
         const column = columns.find(column => column.id === id);
         let columnsCopy = [...columns]; // Create a copy of the columns array
         let index = columnsCopy.indexOf(column);
@@ -145,8 +149,9 @@ function ColumnsContainer() {
                 auxColumn.style.height = `${columnHeight}px`; // Set the height of the column
                 auxColumn.style.zIndex = 1; // Bring it to the front
                 auxColumn.style.opacity = 1; 
+                auxColumn.style.transition = 'top 0.1s ease-in-out';
                 if (i !== index) {
-                    auxColumn.style.transition = 'left 0.1s ease-in-out'; // Add transition for movement
+                    auxColumn.style.transition = 'left 0.1s ease-in-out, opacity 0.2s ease-in-out';
                 }
                 col.parentNode.appendChild(auxColumn); // Append the clone to the parent
                 auxColumns.push(auxColumn); // Store the clone in the array
@@ -155,7 +160,14 @@ function ColumnsContainer() {
         const auxColumn = auxColumns[index];
         const initialX = auxColumn.getBoundingClientRect().left;
         const columnWidth = auxColumn.getBoundingClientRect().width; // Width of the column
+
         auxColumn.style.zIndex = 1000; // Bring it to the front
+        auxColumn.style.top = `${auxColumn.getBoundingClientRect().top - 10}px`;
+        auxColumns.forEach((col, i) => {
+            if (i !== index) {
+                col.style.opacity = 0.5; // Make the other columns transparent
+            }
+        });
 
         // Make all the other columns invisible and disable pointer events
         columnsRef.current.forEach((col) => {
@@ -221,6 +233,7 @@ function ColumnsContainer() {
             auxColumns.forEach((auxColumn) => {
                 auxColumn.parentNode.removeChild(auxColumn); // Remove the clone from the DOM
             });
+            document.documentElement.style.cursor = ''; // Change cursor to grabbing
             columnsRef.current.forEach((col) => {
                 if (col) {
                     col.style.visibility = 'visible'; // Make the other columns transparent

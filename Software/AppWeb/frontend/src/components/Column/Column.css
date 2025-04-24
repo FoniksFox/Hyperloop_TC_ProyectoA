@@ -11,3 +11,54 @@
     z-index: 1;
     padding: 10px 0px;
 }
+
+.column-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(53, 50, 53);
+    border-radius: 8px 8px 0px 0px;
+}
+.column-header-title {
+    font-size: 25px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0px 0px 20px 0px;
+}
+.column-header-managers {
+    font-weight: 300;
+    padding: 0px 5%;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 5%;
+    align-items: center;
+}
+.reorder {
+    cursor: grab;
+    font-weight: inherit;
+    padding: 0px;
+    margin: 0px;
+    transition: scale 0.1s ease-in-out;
+}
+.reorder:hover {
+    scale: 1.1;
+}
+.toggle {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    font-weight: inherit;
+    padding: 0px;
+    margin: 0px;
+    transition: scale 0.1s ease-in-out;
+}
+.toggle:hover {
+    scale: 1.1;
+}
+
+.column-content {
+    width: 100%;
+    flex: 1;
+}

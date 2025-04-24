@@ -14,22 +14,24 @@
 }
 .columns-container-minimized {
     position: relative;
-    max-height: 15px;
+    box-sizing: border-box;
+    max-height: 50px;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
-    padding: 10px;
+    padding: 8px 30px;
     border-radius: 4px;
     gap: 30px;
 }
 .columns-container-minimized::before {
     content: "";
     position: absolute;
-    top: -8px;
-    left: -8px;
-    right: -8px;
-    bottom: -8px;
-    background-color: #ff00ea34;
+    top: 0px;
+    left: 8px;
+    right: 8px;
+    bottom: 0px;
+    background-color: #1b181b;
+    box-shadow: 0.3em 0.3em 0.5em rgba(248, 50, 255, 0.342);
     border-radius: 6px; /* adjust to suit your design */
     z-index: -1;  /* place behind the content */
 }
@@ -50,7 +52,8 @@
     left: 8px;
     right: 8px;
     bottom: 0px;
-    background-color: #ff00ea34;
+    background-color: #1b181b;
+    box-shadow: 0.3em 0.3em 0.5em rgba(248, 50, 255, 0.342);
     border-radius: 6px; /* adjust to suit your design */
     z-index: -1;  /* place behind the content */
 }
@@ -69,14 +72,15 @@
     left: 8px;
     right: 8px;
     bottom: 0px;
-    background-color: #ff00ea34;
+    background-color: #1b181b;
+    box-shadow: 0.3em 0.3em 0.5em rgba(248, 50, 255, 0.342);
     border-radius: 6px; /* adjust to suit your design */
     z-index: -1;  /* place behind the content */
 }
 
 .column-hidden {
     flex: 1;
-    background-color: #cc00ff44;
+    background-color: rgb(53, 50, 53);
     border-radius: 4px;
     transition: scale 0.1s ease-in-out;
 }
