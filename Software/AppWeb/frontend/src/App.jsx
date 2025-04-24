@@ -11,7 +11,7 @@ function App() {
 
   	return (
 		<WebSocketProvider url="ws://localhost:8765">
-			<Router>
+			<Router basename="/Hyperloop_TC_ProyectoA">
 				<Routes>
 					<Route path="/" element={<Home/>} />
 					<Route path="/dev" element={<Dev/>} />
