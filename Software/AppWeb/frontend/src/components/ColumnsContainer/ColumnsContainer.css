@@ -99,11 +99,6 @@
 .resize-handle-inactive {
     width: 10px;
     margin: 0px 3px;
-    height: 100%;
-    background-color: #4c00ff00;
-    border-radius: 4px;
-    cursor: col-resize;
-    position: relative;
-    z-index: 2;
-    transition: background-color 0.3s ease-in-out;
+    height: 95%;
+    visibility: hidden;
 }
