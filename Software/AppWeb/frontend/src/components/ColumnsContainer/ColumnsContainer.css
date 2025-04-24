@@ -1,0 +1,104 @@
+.columns-container-wrapper {
+    width: auto;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    gap: 30px;
+}
+.columns-container {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.columns-container-minimized {
+    position: relative;
+    max-height: 15px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    padding: 10px;
+    border-radius: 4px;
+    gap: 30px;
+}
+.columns-container-minimized::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    background-color: #ff00ea34;
+    border-radius: 6px; /* adjust to suit your design */
+    z-index: -1;  /* place behind the content */
+}
+
+.column-visible {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-clip: content-box;
+    min-width: 200px;
+    transition: opacity 0.3s ease-in-out;
+}
+.column-visible::before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 8px;
+    right: 8px;
+    bottom: 0px;
+    background-color: #ff00ea34;
+    border-radius: 6px; /* adjust to suit your design */
+    z-index: -1;  /* place behind the content */
+}
+
+.column-dragging {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-clip: content-box;
+    min-width: 200px;
+}
+.column-dragging::before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 8px;
+    right: 8px;
+    bottom: 0px;
+    background-color: #ff00ea34;
+    border-radius: 6px; /* adjust to suit your design */
+    z-index: -1;  /* place behind the content */
+}
+
+.column-hidden {
+    flex: 1;
+    background-color: #cc00ff44;
+    border-radius: 4px;
+    transition: scale 0.1s ease-in-out;
+}
+.column-hidden:hover {
+    cursor: pointer;
+    scale: 1.02;
+}
+
+.resize-handle {
+    width: 10px;
+    margin: 0px 3px;
+    height: 95%;
+    background-color: #4c00ff00;
+    border-radius: 4px;
+    cursor: col-resize;
+    position: relative;
+    z-index: 2;
+    transition: background-color 0.3s ease-in-out;
+}
+.resize-handle-inactive {
+    width: 10px;
+    margin: 0px 3px;
+    height: 95%;
+    visibility: hidden;
+}

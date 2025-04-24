@@ -1,0 +1,53 @@
+.header {
+    background-color: #1b181b;
+    padding: 20px;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0em 0.5em 1em rgba(248, 50, 255, 0.479);
+}
+
+button {
+    transition: transform 0.2s ease-in-out;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+.sidebar-toggle-icon img{
+    width: 50px;
+    height: 50px;
+    filter: invert(100%) brightness(100%) contrast(100%);
+}
+
+.header-title {
+    font-weight: bold;
+    flex-grow: 1;
+    cursor: pointer;
+    transition: 0.5s ease-in-out;
+}
+.header-title:hover {
+    animation: bounce 0.5s ease-in-out forwards;
+    color: #d233d8;
+}
+
+@keyframes bounce {
+    0% {
+        transform: scale(1);
+    }
+    20% {
+        transform: scale(1.15);
+    }
+    55% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1.1);
+    }
+    
+}
