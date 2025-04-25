@@ -149,7 +149,7 @@ function ColumnsContainer() {
 
         auxColumn.style.zIndex = 1000;
         auxColumn.style.top = `${auxColumn.getBoundingClientRect().top - 10}px`;
-        auxColumn.style.setProperty('--box-shadow', '0.5em 0.9em 0.8em rgba(248, 50, 255, 0.23)');
+        auxColumn.style.setProperty('--box-shadow', '0.5em 0.9em 0.8em rgba(248, 50, 255, 0.14)');
         auxColumns.forEach((col, i) => {
             if (i !== index) {
                 col.style.opacity = 0.5;
