@@ -2,6 +2,7 @@ import './ColumnsContainer.css';
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 import Column from '../Column/Column.jsx';
+import WSButton from '../WSButton/WSButton.jsx';
 
 // Handle resizing, closing and opening of the columns (when minimized, they appear at the bottom of the screen as a bar)
 function ColumnsContainer() {
@@ -136,6 +137,7 @@ function ColumnsContainer() {
                 auxColumn.style.top = `${initialY}px`;
                 auxColumn.style.width = `${columnWidth}px`;
                 auxColumn.style.height = `${columnHeight}px`;
+                auxColumn.style.pointerEvents = 'none';
                 if (i !== index) {
                     auxColumn.style.transition = 'left 0.2s ease-in-out, opacity 0.2s ease-in-out';
                 }
@@ -248,7 +250,15 @@ function ColumnsContainer() {
 
     const columnsContent = {
         charts: <div>Charts Content</div>,
-        buttons: <div>Buttons Content</div>,
+        buttons:
+            <>
+                <WSButton command="precharge"/>
+                <WSButton command="start levitation"/>
+                <WSButton command="start motor"/>
+                <WSButton command="stop motor"/>
+                <WSButton command="stop levitation"/>
+                <WSButton command="discharge"/>
+            </>,
         console: <div>Console Content</div>,
     }
 
