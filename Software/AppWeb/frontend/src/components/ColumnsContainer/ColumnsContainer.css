@@ -67,7 +67,7 @@
     align-items: center;
     background-clip: content-box;
     min-width: 200px;
-    transition: top 0.1s ease-in-out;
+    transition: top 0.2s ease-in-out;
 }
 .column-dragging::before {
     content: "";
@@ -77,7 +77,8 @@
     right: 8px;
     bottom: 0px;
     background-color: #1b181b;
-    box-shadow: 0.3em 0.3em 0.5em rgba(248, 50, 255, 0.342);
+    transition: box-shadow 0.1s ease-in-out;
+    box-shadow: var(--box-shadow, 0.3em 0.3em 0.5em rgba(248, 50, 255, 0.342));
     border-radius: 6px; /* adjust to suit your design */
     z-index: -1;  /* place behind the content */
 }

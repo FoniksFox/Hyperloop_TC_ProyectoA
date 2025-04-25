@@ -149,6 +149,7 @@ function ColumnsContainer() {
 
         auxColumn.style.zIndex = 1000;
         auxColumn.style.top = `${auxColumn.getBoundingClientRect().top - 10}px`;
+        auxColumn.style.setProperty('--box-shadow', '0.5em 0.9em 0.8em rgba(248, 50, 255, 0.23)');
         auxColumns.forEach((col, i) => {
             if (i !== index) {
                 col.style.opacity = 0.5;
@@ -214,6 +215,7 @@ function ColumnsContainer() {
             auxColumn.style.transition = 'left 0.2s ease-in-out, top 0.2s ease-in-out';
             auxColumn.style.left = `${containerOffset + columnsCopy.slice(0, index).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * containerRef.current.getBoundingClientRect().width}px`;
             auxColumn.style.top = `${containerRef.current.getBoundingClientRect().top}px`;
+            auxColumn.style.setProperty('--box-shadow', '');
             auxColumns.forEach((col, i) => {
                 if (i !== index) {
                     col.style.opacity = 1;
