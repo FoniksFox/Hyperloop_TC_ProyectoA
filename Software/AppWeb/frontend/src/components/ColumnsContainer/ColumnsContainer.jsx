@@ -137,7 +137,7 @@ function ColumnsContainer() {
                 auxColumn.style.width = `${columnWidth}px`;
                 auxColumn.style.height = `${columnHeight}px`;
                 if (i !== index) {
-                    auxColumn.style.transition = 'left 0.1s ease-in-out, opacity 0.2s ease-in-out';
+                    auxColumn.style.transition = 'left 0.2s ease-in-out, opacity 0.2s ease-in-out';
                 }
                 col.parentNode.appendChild(auxColumn);
                 auxColumns.push(auxColumn);
@@ -160,15 +160,12 @@ function ColumnsContainer() {
             if (col) {
                 col.style.visibility = 'hidden';
                 col.style.pointerEvents = 'none';
-                if (i !== index) {
-                    col.style.opacity = 0.5;
-                }
             }
         });
 
         const initialMouseX = event.clientX;
+        const containerOffset = containerRef.current.getBoundingClientRect().left;
         const onMouseMove = (moveEvent) => {
-            const containerOffset = containerRef.current.getBoundingClientRect().left;
             const deltaX = moveEvent.clientX - initialMouseX;
             const newX = Math.min(Math.max(initialX + deltaX, containerRef.current.getBoundingClientRect().left), containerRef.current.getBoundingClientRect().right - columnWidth); // Ensure it doesn't go out of bounds
             auxColumn.style.left = `${newX}px`;
@@ -210,21 +207,37 @@ function ColumnsContainer() {
             }
         };
         
-        const onMouseUp = () => {
+        const onMouseUp = async () => {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('mouseup', onMouseUp);
+            document.documentElement.style.cursor = '';
+            auxColumn.style.transition = 'left 0.2s ease-in-out, top 0.2s ease-in-out';
+            auxColumn.style.left = `${containerOffset + columnsCopy.slice(0, index).reduce((acc, col) => acc + (col.visible ? col.width : 0), 0) / 100 * containerRef.current.getBoundingClientRect().width}px`;
+            auxColumn.style.top = `${containerRef.current.getBoundingClientRect().top}px`;
+            auxColumns.forEach((col, i) => {
+                if (i !== index) {
+                    col.style.opacity = 1;
+                }
+            });
+            const waitForAllTransitions = (elements) => {
+                return Promise.all(
+                    elements.map(element => new Promise(resolve => {
+                        element.addEventListener('transitionend', resolve, { once: true });
+                    }))
+                );
+            };
+            await waitForAllTransitions(auxColumns);
+            setColumns(columnsCopy);
+            await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))); // Wait for 2 frames to ensure the transition is complete
             auxColumns.forEach((auxColumn) => {
                 auxColumn.parentNode.removeChild(auxColumn);
             });
-            document.documentElement.style.cursor = '';
             columnsRef.current.forEach((col) => {
                 if (col) {
                     col.style.visibility = 'visible';
                     col.style.pointerEvents = 'auto';
-                    col.style.opacity = 1;
                 }
             });
-            setColumns(columnsCopy);
         };
 
         window.addEventListener('mousemove', onMouseMove);
