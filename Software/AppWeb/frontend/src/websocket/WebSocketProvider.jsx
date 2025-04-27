@@ -7,32 +7,33 @@ export const WebSocketProvider = ({ url, children }) => {
     const messageSubscribers = useRef([]);
     const [isConnected, setIsConnected] = useState(false);
 
+    const notifySubscribers = useCallback((message) => {
+        const timestamp = new Date().toLocaleTimeString();
+        messageSubscribers.current.forEach((callback) => callback({ ...message, timestamp: timestamp }));
+    }, []);
+
     useEffect(() => {
         wsRef.current = new WebSocket(url);
 
         wsRef.current.onopen = () => {
             console.log('WebSocket connection established');
             setIsConnected(true);
-            // Notify all subscribers about the connection
-            messageSubscribers.current.forEach((callback) => callback({ type: 'connection', status: true }));
+            notifySubscribers({ type: 'connection', status: true });
         };
 
         wsRef.current.onmessage = (event) => {
             console.log('Message from server:', event);
-            // Dispatch the event to all subscribed callbacks
-            messageSubscribers.current.forEach((callback) => callback({ type: 'message', data: event }));
+            notifySubscribers({ type: 'message', data: event.data });
         };
 
         wsRef.current.onerror = (error) => {
             console.error('WebSocket error:', error);
-            // Notify all subscribers about the error
-            messageSubscribers.current.forEach((callback) => callback({ type: 'error', error }));
+            notifySubscribers({ type: 'error', error });
         };
 
         wsRef.current.onclose = () => {
             console.log('WebSocket connection closed');
-            // Notify all subscribers about the disconnection
-            messageSubscribers.current.forEach((callback) => callback({ type: 'connection', status: false }));
+            notifySubscribers({ type: 'connection', status: false });
             setIsConnected(false);
         };
 
@@ -55,12 +56,10 @@ export const WebSocketProvider = ({ url, children }) => {
             const order = { id: orderName };
             wsRef.current.send(JSON.stringify(order));
             console.log('Order sent:', orderName);
-            // Notify all subscribers about the order sent
-            messageSubscribers.current.forEach((callback) => callback({ type: 'order', order }));
+            notifySubscribers({ type: 'order', order });
         } else {
             console.error('WebSocket is not open. Unable to send order:', orderName);
-            // Notify all subscribers about the error
-            messageSubscribers.current.forEach((callback) => callback({ type: 'error', error: new Error('WebSocket is not open. Unable to send order') }));
+            notifySubscribers({ type: 'error', error: new Error('WebSocket is not open. Unable to send order') });
         }
     }, []);
 
