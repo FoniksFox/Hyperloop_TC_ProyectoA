@@ -3,6 +3,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 
 import Column from '../Column/Column.jsx';
 import WSButton from '../WSButton/WSButton.jsx';
+import Console from '../Console/Console.jsx';
 
 // Handle resizing, closing and opening of the columns (when minimized, they appear at the bottom of the screen as a bar)
 function ColumnsContainer() {
@@ -259,7 +260,10 @@ function ColumnsContainer() {
                 <WSButton command="stop levitation"/>
                 <WSButton command="discharge"/>
             </>,
-        console: <div>Console Content</div>,
+        console: 
+            <>
+                <Console/>
+            </>,
     }
 
     return (

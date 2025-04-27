@@ -1,0 +1,100 @@
+.column-content .console {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.column-content .console button {
+    padding: 5px;
+    flex: 1;
+    border-radius: 4px;
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+    border: none;
+}
+.column-content .console button:hover {
+    transform: scale(1.03);
+    outline: none;
+    border: none;
+}
+.column-content .console button:active {
+    transform: scale(0.98);
+}
+.column-content .console button:focus {
+    outline: none;
+    animation: fadeOutline 2s forwards;
+}
+@keyframes fadeOutline {
+    0% {
+        box-shadow: 0 0 0 2px rgb(255, 255, 255);
+    } 50% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.747);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    }
+}
+
+.console-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background-color: rgb(53, 50, 53);
+    border-radius: 8px 8px 0px 0px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+}
+.console-indicator {
+    flex: 2;
+}
+.console-header-managers {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+.console-filters {
+    position: absolute;
+}
+
+.console-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow-y: auto;
+    border: rgb(53, 50, 53) solid;
+    border-width: 0px 3px;
+    background-color: #000000;
+}
+.scroll-helper {
+    max-height: 0px;
+}
+/* Use default scrollbar style
+.console-content::-webkit-scrollbar {
+
+}
+*/
+
+.console-sender {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    gap: 10px;
+    background-color: rgb(53, 50, 53);
+    border-radius: 0px 0px 8px 8px;
+}
+.console-input {
+    flex: 3;
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    background-color: rgb(53, 50, 53);
+    font-size: 16px;
+}
