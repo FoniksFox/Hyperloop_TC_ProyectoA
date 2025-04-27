@@ -49,8 +49,8 @@ function Console() {
                 <div className="console-indicator">{isConnected ? 'Yeah' : 'Nay'}</div>
                 <div className="console-header-managers">
                     <button className="console-clear" onClick={() => dispatch({ type: 'clear' })}>Cl</button>
-                    <button className="console-connect" onClick={() => subscribe((newMessage) => dispatch({ type: 'message', data: newMessage }))}>Con</button>
-                    <button className="console-config" onClick={() => filtersRef.current.style.visibility = filtersRef.current.style.visibility == 'visible' ? 'hidden' : 'visible'}>Conf</button>
+                    <button className="console-connect" onClick={() => subscribe((newMessage) => dispatch({ type: 'message', data: newMessage }))}>S</button>
+                    <button className="console-config" onClick={() => filtersRef.current.style.visibility = filtersRef.current.style.visibility == 'visible' ? 'hidden' : 'visible'}>F</button>
                     <div className="console-filters" ref={filtersRef}>
                         <label>
                             <input type="checkbox" checked={filters.connection} onChange={() => setFilters({ ...filters, connection: !filters.connection })} />
@@ -77,7 +77,7 @@ function Console() {
                 </div>
             </div>
             <div className="console-sender">
-                <input type="text" className="console-input" placeholder="Type your command here..." ref={inputRef}
+                <input type="text" className="console-input" placeholder="Type here..." ref={inputRef}
                     onKeyDown={(event) => {
                         if (event.key === 'Enter') {
                             sendOrder(inputRef.current.value);
