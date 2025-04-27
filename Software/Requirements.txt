@@ -1,24 +1,48 @@
 # Essential
 
 ## Frontend
-* Desarrollo en React
-* Comunicaciones por WebSocket
-* Disposición en columnas
-* Gráficas
-* Botones
-* Consola de comandos
+[X] Desarrollo en React
+[X] Comunicaciones por WebSocket
+[X] Disposición en columnas
+[ ] Gráficas
+[X] Botones
+[ ] Consola de comandos
 
 ## Backend
-* Por determinar, está la opción de pedirlo ya hecho
+[X] Comuniaciones por WebSocket
+[X] Simulador
+
 
 # Optional
 
 ## Frontend
-* Añadir cosas extra
-* Identificar vuestras necesidades
+[X] Columnas ajustables
+[ ] Iconos
+[ ] Animaciones
+    [X] Desplazamiento de columans
+    [ ] Ocultar columnas
+    [ ] Otras Animaciones
+[ ] Mejorar las animaciones (técnica Flip?)
+[ ] Barra lateral
+[ ] Página de inicio
+[ ] Mejora del CSS (Tailwind?)
+[ ] Configuraciones
+[ ] Gadgets
+[ ] Limpiar el código
+[ ] Documentación del código
+[ ] Pruebas unitarias
+[ ] Estudio de la UX
+[ ] Estudio de la UI
+[ ] Limpieza del HTML para mayor accesibilidad
+[ ] Controles mediante teclado
+[ ] Versión móvil
+[ ] Otras páginas
+[ ] Guardar Configuraciones
 
 ## Backend
-* Por determinar
+[ ] Órdenes con parametros (sintaxis? Mandar JSONs?)
+[ ] Guardar logs
 
-## Attribution
+
+# Attribution
 Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
