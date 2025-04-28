@@ -4,6 +4,8 @@ export const WebSocketContext = createContext(null);
 
 export const WebSocketProvider = ({ url, children }) => {
     const wsRef = useRef(null);
+    const reconnectTimeoutRef = useRef(null);
+    const reconnectInterval = 5000; // 5 seconds
     const messageSubscribers = useRef([]);
     const [isConnected, setIsConnected] = useState(false);
 
@@ -12,7 +14,7 @@ export const WebSocketProvider = ({ url, children }) => {
         messageSubscribers.current.forEach((callback) => callback({ ...message, timestamp: timestamp }));
     }, []);
 
-    useEffect(() => {
+    const connect = useCallback(() => {
         wsRef.current = new WebSocket(url);
 
         wsRef.current.onopen = () => {
@@ -42,14 +44,25 @@ export const WebSocketProvider = ({ url, children }) => {
             //console.log('WebSocket connection closed');
             notifySubscribers({ type: 'connection', status: false });
             setIsConnected(false);
+            reconnectTimeoutRef.current = setTimeout(() => {
+                connect(); // Attempt to reconnect
+            }, reconnectInterval);
         };
 
+    }, [url, notifySubscribers]);
+
+    useEffect(() => {
+        connect(); // Initial connection
+
         return () => {
+            if (reconnectTimeoutRef.current) {
+                clearTimeout(reconnectTimeoutRef.current); // Clear the timeout if the component unmounts
+            }
             if (wsRef.current) {
-                wsRef.current.close();
+                wsRef.current.close(); // Close the WebSocket connection
             }
         };
-    }, [url]);
+    }, [connect]);
 
     const subscribe = useCallback((callback) => {
         messageSubscribers.current.push(callback);
