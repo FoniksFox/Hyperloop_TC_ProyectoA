@@ -106,11 +106,14 @@
     max-height: 0px;
     min-width: 0px;
 }
-/* Use default scrollbar style
 .console-content::-webkit-scrollbar {
-
+    width: 8px;
 }
-*/
+.console-content::-webkit-scrollbar-thumb {
+    background-color: rgb(129, 129, 129);
+    border-radius: 4px;
+}
+
 .console-message {
     word-break: break-word;
     text-align: left;
