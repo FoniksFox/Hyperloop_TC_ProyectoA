@@ -9,10 +9,10 @@ function Console() {
         switch (action.type) {
             case 'message':
                 let data = action.data;
-                try {
-                    const id = action.data.id;
+                const id = action.data.id;
+                if (id) {
                     data = { type: 'message', id: id, data: action.data.data, timestamp: action.data.timestamp };
-                } catch (error) {}
+                }
                 let newState = [...state, data];
                 if (newState.length > messagesLimit) {
                     newState = newState.slice((newState.length-messagesLimit));
@@ -29,9 +29,7 @@ function Console() {
     useEffect(() => {
         if (consoleContentRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = consoleContentRef.current;
-            console.log(scrollTop, scrollHeight, clientHeight);
             if (scrollTop + clientHeight >= scrollHeight - 50) {
-                console.log('scrolling to bottom');
                 consoleContentRef.current.scrollTop = scrollHeight;
             }
         }

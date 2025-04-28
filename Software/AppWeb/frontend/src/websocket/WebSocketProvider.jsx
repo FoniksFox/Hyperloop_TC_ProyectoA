@@ -16,13 +16,13 @@ export const WebSocketProvider = ({ url, children }) => {
         wsRef.current = new WebSocket(url);
 
         wsRef.current.onopen = () => {
-            console.log('WebSocket connection established');
+            //console.log('WebSocket connection established');
             setIsConnected(true);
             notifySubscribers({ type: 'connection', status: true });
         };
 
         wsRef.current.onmessage = (event) => {
-            console.log('Message from server:', event);
+            //console.log('Message from server:', event);
             try {
                 const parsedData = JSON.parse(event.data);
                 notifySubscribers({ type: 'message', id: parsedData.id, data: parsedData.data });
@@ -39,7 +39,7 @@ export const WebSocketProvider = ({ url, children }) => {
         };
 
         wsRef.current.onclose = () => {
-            console.log('WebSocket connection closed');
+            //console.log('WebSocket connection closed');
             notifySubscribers({ type: 'connection', status: false });
             setIsConnected(false);
         };
@@ -62,7 +62,7 @@ export const WebSocketProvider = ({ url, children }) => {
         if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
             const order = { id: orderName };
             wsRef.current.send(JSON.stringify(order));
-            console.log('Order sent:', orderName);
+            //console.log('Order sent:', orderName);
             notifySubscribers({ type: 'order', order: orderName });
         } else {
             console.error('WebSocket is not open. Unable to send order:', orderName);
