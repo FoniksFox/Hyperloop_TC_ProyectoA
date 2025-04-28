@@ -23,7 +23,14 @@ export const WebSocketProvider = ({ url, children }) => {
 
         wsRef.current.onmessage = (event) => {
             console.log('Message from server:', event);
-            notifySubscribers({ type: 'message', data: event.data });
+            try {
+                const parsedData = JSON.parse(event.data);
+                notifySubscribers({ type: 'message', id: parsedData.id, data: parsedData.data });
+            } catch (error) {
+                console.error('Error parsing message:', error);
+                notifySubscribers({ type: 'error', error: new Error('Error parsing message') });
+                return;
+            }
         };
 
         wsRef.current.onerror = (error) => {
@@ -56,7 +63,7 @@ export const WebSocketProvider = ({ url, children }) => {
             const order = { id: orderName };
             wsRef.current.send(JSON.stringify(order));
             console.log('Order sent:', orderName);
-            notifySubscribers({ type: 'order', order });
+            notifySubscribers({ type: 'order', order: orderName });
         } else {
             console.error('WebSocket is not open. Unable to send order:', orderName);
             notifySubscribers({ type: 'error', error: new Error('WebSocket is not open. Unable to send order') });
