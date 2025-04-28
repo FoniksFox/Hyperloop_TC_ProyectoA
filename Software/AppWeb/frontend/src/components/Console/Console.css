@@ -58,29 +58,66 @@
     gap: 5px;
 }
 .console-filters {
+    display: inline-block;
+    flex-direction: column;
+}
+.console-filters-content {
     position: absolute;
+    right: 0px;
     display: flex;
     flex-direction: column;
+    background-color: rgb(53, 50, 53);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 5px;
+}
+.console-filters-content label {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    color: #fff;
 }
 
 .console-content {
     flex: 1;
+    min-width: 0px;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     padding: 10px;
     overflow-y: auto;
+    overflow-x: auto;
     border: rgb(53, 50, 53) solid;
     border-width: 0px 3px;
     background-color: #000000;
 }
 .scroll-helper {
     max-height: 0px;
+    min-width: 0px;
 }
 /* Use default scrollbar style
 .console-content::-webkit-scrollbar {
 
 }
 */
+.console-message {
+    word-break: break-word;
+    text-align: left;
+    text-indent: 10px ;
+}
+.console-message.error {
+    color: rgb(255, 65, 65);
+}
+.console-message.order {
+    color: rgb(129, 255, 103);
+}
+.console-message.connection {
+    color: rgb(244, 67, 250);
+}
 
 .console-sender {
     display: flex;
