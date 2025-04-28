@@ -31,13 +31,27 @@ function Console() {
     }, [isSubscribed, isConnected]);
 
     const messagesLimit = 300;
+    const messagesKey = useRef(0);
+    const setMessagesKey = useCallback((value) => {
+        if (value === undefined) {
+            if (messagesKey.current >= messagesLimit) {
+                messagesKey.current = 0;
+            } else {
+                messagesKey.current += 1;
+            }
+        } else {
+            messagesKey.current = value;
+        }
+        return messagesKey.current;
+    }, []);
     const [messages, dispatch] = useReducer((state, action) => {
         switch (action.type) {
             case 'message':
-                let message = action.data;
+                const messageKey = setMessagesKey();
+                let message = { ...action.data, key: messageKey };
                 const id = message.id;
                 if (id) {
-                    message = { type: 'message', id: id, data: message.data, timestamp: message.timestamp };
+                    message = { key: messageKey, type: 'message', id: id, data: message.data, timestamp: message.timestamp};
                 }
                 let newState = [...state, message];
                 if (newState.length > messagesLimit) {
@@ -45,6 +59,7 @@ function Console() {
                 }
                 return newState;
             case 'clear':
+                setMessagesKey(0);
                 return [];
             default:
                 return state;
@@ -57,7 +72,7 @@ function Console() {
     useEffect(() => {
         if (consoleContentRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = consoleContentRef.current;
-            if (scrollTop + clientHeight >= scrollHeight - 50) {
+            if (scrollTop + clientHeight >= scrollHeight - 100) {
                 consoleContentRef.current.scrollTop = scrollHeight;
             }
         }
@@ -132,7 +147,7 @@ function Console() {
                                 Error
                             </label>
                             <label>
-                                <input type="checkbox" checked={filters.order} onChange={() => setFilters({ ...filters, order: !filters.order })} />
+                                <input type="checkbox" checked={filters.order} onChange={() => setFilters({ ...filters, order: !filters.order })}/>
                                 Order
                             </label>
                         </div>
@@ -148,8 +163,8 @@ function Console() {
                         } else {
                             return true;
                         }
-                    }).map((message, index) => (
-                        <div key={index} className={`console-message ${message.type} ${message.id? message.id : ''}`}>
+                    }).map((message) => (
+                        <div key={message.key} className={`console-message ${message.type} ${message.id? message.id : ''}`}>
                             {stringifyMessage(message)}
                         </div>
                     ))}
