@@ -4,6 +4,32 @@ import { WebSocketContext } from '../../websocket/WebSocketProvider';
 
 function Console() {
     const { isConnected, subscribe, sendOrder } = useContext(WebSocketContext);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [unsubcribe, setUnsubscribe] = useState(null);
+    const toggleSubscription = useCallback(() => {
+        if (isSubscribed) {
+            if (unsubcribe) {
+                unsubcribe();
+            }
+            setIsSubscribed(false);
+            setUnsubscribe(null);
+            return;
+        } else {
+            const aux = subscribe((newMessage) => dispatch({ type: 'message', data: newMessage }))
+            setIsSubscribed(true);
+            setUnsubscribe(() => aux);
+        }
+    });
+    const getStatus = useCallback(() => {
+        if (!isSubscribed) {
+            return 'Nay';
+        } else if (!isConnected) {
+            return 'Yay';
+        } else {
+            return 'Yeah';
+        }
+    }, [isSubscribed, isConnected]);
+
     const messagesLimit = 300;
     const [messages, dispatch] = useReducer((state, action) => {
         switch (action.type) {
@@ -76,10 +102,10 @@ function Console() {
     return (
         <div className="console">
             <div className="console-header">
-                <div className="console-indicator">{isConnected ? 'Yeah' : 'Nay'}</div>
+                <div className="console-indicator">{getStatus()}</div>
                 <div className="console-header-managers">
                     <button className="console-clear" onClick={() => dispatch({ type: 'clear' })}>Cl</button>
-                    <button className="console-connect" onClick={() => subscribe((newMessage) => dispatch({ type: 'message', data: newMessage }))}>S</button>
+                    <button className="console-connect" onClick={toggleSubscription}>S</button>
                     <div className="console-filters">
                         <button className="console-config" onClick={() => setFiltersVisible(!filtersVisible)}>F</button>
                         <div className="console-filters-content" ref={filtersRef} style={{ visibility: filtersVisible ? 'visible' : 'hidden' }}>
