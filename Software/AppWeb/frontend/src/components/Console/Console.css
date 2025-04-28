@@ -75,10 +75,17 @@
 }
 .console-filters-content label {
     display: flex;
+    flex-direction: row;
     align-items: center;
     padding: 5px;
     cursor: pointer;
     color: #fff;
+    gap: 5px;
+}
+.console-filters-subcontent {
+    display: flex;
+    flex-direction: column;
+    border-left:rgba(0, 0, 0, 0.459) solid;
 }
 
 .console-content {

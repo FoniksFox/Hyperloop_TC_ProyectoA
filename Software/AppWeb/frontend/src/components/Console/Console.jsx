@@ -8,12 +8,12 @@ function Console() {
     const [messages, dispatch] = useReducer((state, action) => {
         switch (action.type) {
             case 'message':
-                let data = action.data;
-                const id = action.data.id;
+                let message = action.data;
+                const id = message.id;
                 if (id) {
-                    data = { type: 'message', id: id, data: action.data.data, timestamp: action.data.timestamp };
+                    message = { type: 'message', id: id, data: message.data, timestamp: message.timestamp };
                 }
-                let newState = [...state, data];
+                let newState = [...state, message];
                 if (newState.length > messagesLimit) {
                     newState = newState.slice((newState.length-messagesLimit));
                 }
@@ -24,7 +24,9 @@ function Console() {
                 return state;
         }
     }, []);
+
     const inputRef = useRef(null);
+
     const consoleContentRef = useRef(null);
     useEffect(() => {
         if (consoleContentRef.current) {
@@ -34,8 +36,12 @@ function Console() {
             }
         }
     }, [messages]);
+
+    const [filtersVisible, setFiltersVisible] = useState(false);
     const filtersRef = useRef(null);
     const [filters, setFilters] = useState({ connection: true, message: true, error: true, order: true });
+    const messageFiltersRef = useRef(filters);
+    const [messageFilters, setMessageFilters] = useState({ data: true, other: true });
 
     const stringifyMessage = useCallback((message) => {
         let messageString = '-';
@@ -75,8 +81,8 @@ function Console() {
                     <button className="console-clear" onClick={() => dispatch({ type: 'clear' })}>Cl</button>
                     <button className="console-connect" onClick={() => subscribe((newMessage) => dispatch({ type: 'message', data: newMessage }))}>S</button>
                     <div className="console-filters">
-                        <button className="console-config" onClick={() => filtersRef.current.style.visibility = filtersRef.current.style.visibility == 'visible' ? 'hidden' : 'visible'}>F</button>
-                        <div className="console-filters-content" ref={filtersRef} style={{ visibility: 'hidden' }}>
+                        <button className="console-config" onClick={() => setFiltersVisible(!filtersVisible)}>F</button>
+                        <div className="console-filters-content" ref={filtersRef} style={{ visibility: filtersVisible ? 'visible' : 'hidden' }}>
                             <label>
                                 <input type="checkbox" checked={filters.connection} onChange={() => setFilters({ ...filters, connection: !filters.connection })} />
                                 Connection
@@ -84,6 +90,16 @@ function Console() {
                             <label>
                                 <input type="checkbox" checked={filters.message} onChange={() => setFilters({ ...filters, message: !filters.message })} />
                                 Message
+                                <div className="console-filters-subcontent" ref={messageFiltersRef} style={{ visibility: (filters.message && filtersVisible) ? 'visible' : 'hidden' }}>
+                                    <label>
+                                        <input type="checkbox" checked={messageFilters.data} onChange={() => setMessageFilters({ ...messageFilters, data: !messageFilters.data })} />
+                                        Data
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" checked={messageFilters.other} onChange={() => setMessageFilters({ ...messageFilters, other: !messageFilters.other })} />
+                                        Other
+                                    </label>
+                                </div>
                             </label>
                             <label>
                                 <input type="checkbox" checked={filters.error} onChange={() => setFilters({ ...filters, error: !filters.error })} />
@@ -99,7 +115,14 @@ function Console() {
             </div>
             <div className="console-content" ref={consoleContentRef}>
                 <div className="scroll-helper">
-                    {messages.filter((message) => filters[message.type]).map((message, index) => (
+                    {messages.filter((message) => {
+                        if (!filters[message.type]) return false;
+                        if (message.type === 'message' && message.id) {
+                            return messageFilters[message.id];
+                        } else {
+                            return true;
+                        }
+                    }).map((message, index) => (
                         <div key={index} className={`console-message ${message.type} ${message.id? message.id : ''}`}>
                             {stringifyMessage(message)}
                         </div>
