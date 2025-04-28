@@ -119,6 +119,9 @@
     text-align: left;
     text-indent: 10px ;
 }
+.console-message.message.data {
+    color: rgb(117, 117, 117);
+}
 .console-message.error {
     color: rgb(255, 65, 65);
 }
