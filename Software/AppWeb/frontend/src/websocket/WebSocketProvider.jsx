@@ -10,7 +10,9 @@ export const WebSocketProvider = ({ url, children }) => {
     const [isConnected, setIsConnected] = useState(false);
 
     const notifySubscribers = useCallback((message) => {
-        const timestamp = new Date().toLocaleTimeString();
+        const now = new Date();
+        const ms = ("00" + now.getMilliseconds()).slice(-3);
+        const timestamp = now.toLocaleTimeString() + ":" + ms;
         messageSubscribers.current.forEach((callback) => callback({ ...message, timestamp: timestamp }));
     }, []);
 
