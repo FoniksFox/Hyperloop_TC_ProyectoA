@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import Column from '../Column/Column.jsx';
 import WSButton from '../WSButton/WSButton.jsx';
 import Console from '../Console/Console.jsx';
+import Chart from '../Chart/Chart.jsx';
 
 // Handle resizing, closing and opening of the columns (when minimized, they appear at the bottom of the screen as a bar)
 function ColumnsContainer() {
@@ -250,7 +251,10 @@ function ColumnsContainer() {
     })
 
     const columnsContent = {
-        charts: <div>Charts Content</div>,
+        charts: 
+            <>
+                <Chart title="Voltage" dataKey="voltage" yUnits="V"/>
+            </>,
         buttons:
             <>
                 <WSButton command="precharge"/>
