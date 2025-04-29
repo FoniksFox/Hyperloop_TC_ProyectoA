@@ -85,7 +85,7 @@ function Console() {
     const filtersRef = useRef(null);
     const [filters, setFilters] = useState({ connection: true, message: true, error: true, order: true });
     const messageFiltersRef = useRef(filters);
-    const [messageFilters, setMessageFilters] = useState({ data: true, other: true });
+    const [messageFilters, setMessageFilters] = useState({ data: true, response: true, other: true });
 
     const stringifyMessage = useCallback((message) => {
         let messageString = '-';
@@ -97,8 +97,11 @@ function Console() {
             case 'message':
                 try {
                     const messageID = message.id;
+                    //console.log(messageID);
                     if (messageID === 'data') {
                         messageString += 'Data received';
+                    } else if (messageID === 'response') {
+                        messageString += 'Response received: ' + message.data;
                     }
                 } catch (error) {
                     messageString += `Message: ${JSON.stringify(message.data)}`;
@@ -140,6 +143,10 @@ function Console() {
                                         Data
                                     </label>
                                     <label>
+                                        <input type="checkbox" checked={messageFilters.response} onChange={() => setMessageFilters({ ...messageFilters, response: !messageFilters.response })} />
+                                        Response
+                                    </label>
+                                    <label>
                                         <input type="checkbox" checked={messageFilters.other} onChange={() => setMessageFilters({ ...messageFilters, other: !messageFilters.other })} />
                                         Other
                                     </label>
@@ -162,7 +169,11 @@ function Console() {
                     {messages.filter((message) => {
                         if (!filters[message.type]) return false;
                         if (message.type === 'message' && message.id) {
-                            return messageFilters[message.id];
+                            if (messageFilters[message.id] === false) return false;
+                            if (messageFilters[message.id] === undefined) {
+                                if (messageFilters["other"] === false) return false;
+                            }
+                            return true;
                         } else {
                             return true;
                         }
