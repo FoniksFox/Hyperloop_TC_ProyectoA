@@ -48,10 +48,13 @@ function Console() {
         switch (action.type) {
             case 'message':
                 const messageKey = setMessagesKey();
-                let message = { ...action.data, key: messageKey };
+                let timestamp = action.data.timestamp;
+                const ms = ("00" + timestamp.getMilliseconds()).slice(-3);
+                timestamp = timestamp.toLocaleTimeString() + ":" + ms;
+                let message = { ...action.data, key: messageKey, timestamp: timestamp };
                 const id = message.id;
                 if (id) {
-                    message = { key: messageKey, type: 'message', id: id, data: message.data, timestamp: message.timestamp};
+                    message = { key: messageKey, type: 'message', id: id, data: message.data, timestamp: timestamp};
                 }
                 let newState = [...state, message];
                 if (newState.length > messagesLimit) {
