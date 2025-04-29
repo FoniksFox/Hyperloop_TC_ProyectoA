@@ -253,7 +253,7 @@ function ColumnsContainer() {
     const columnsContent = {
         charts: 
             <>
-                <Chart title="Voltage" dataKey="voltage" yUnits="V"/>
+                <Chart dataKey="voltage" yUnits="V"/>
             </>,
         buttons:
             <>

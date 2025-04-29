@@ -1,36 +1,22 @@
 import './Chart.css';
 import { WebSocketContext } from '../../websocket/WebSocketProvider';
 import { useReducer, useContext, useEffect, useCallback, useRef, useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import SmoothieComponent, { TimeSeries } from 'react-smoothie';
 
 function Chart( { title, dataKey, yUnits}) {
+    if (!title) {
+        title = dataKey.charAt(0).toUpperCase() + dataKey.slice(1);
+    }
     const { isConnected, subscribe} = useContext(WebSocketContext);
-    const yRange = useRef([0, 0]);
-    const xRange = useRef(10000); // 10 seconds
-    const [data, setData] = useReducer((state, action) => {
-        switch (action.type) {
-            case 'data':
-                let newData = action.data[dataKey];
-                const maxX = action.timestamp.getTime();
-                if (newData === undefined || newData === null || maxX === undefined || maxX === null) {
-                    console.error('Invalid data received:', action.data);
-                    return state;
-                }
-                let newState = [...state, {yKey: newData, xKey: maxX}];
-                newState = newState.filter((item) => item.xKey >= maxX - xRange.current - 1000); // 1 second tolerance for smoother chart
-                return newState;
-            case 'clear':
-                return [];
-            default:
-                return state;
-            }
-    }, []);
+
+    const line = useRef(new TimeSeries());
+
     const subscribeToData = useCallback(() => {
         const unsubscribe = subscribe((newMessage) => {
             if (newMessage.type !== 'message' || newMessage.id !== 'data') {
                 return;
             }
-            setData({ type: 'data', data: newMessage.data, timestamp: newMessage.timestamp });
+            line.current.append(newMessage.timestamp, newMessage.data[dataKey]);
         });
         return unsubscribe;
     }, [subscribe]);
@@ -41,47 +27,37 @@ function Chart( { title, dataKey, yUnits}) {
         };
     }, [subscribeToData]);
 
-    const [ticks, setTicks] = useState([]);
-    useEffect(() => {
-        if (data.length > 0) {
-            const domainEnd = data[data.length - 1].xKey;
-            const domainStart = domainEnd - xRange.current;
-            const tickCount = 5;
-            const tickInterval = (domainEnd - domainStart) / tickCount;
-            const newTicks = Array.from({ length: tickCount + 1 }, (_, i) => domainStart + i * tickInterval);
-            setTicks(newTicks);
-            //console.log("Ticks:", newTicks);
-        }
-    }, [data]);
-
-
     return (
-        <div className="chart-container">
+        <div className ="chart-container">
             <h3>{title || "Chart"}</h3>
-            <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={data} >
-                    <Line type="monotone" dataKey="yKey" stroke="#8884d8" />
-                    <XAxis 
-                        dataKey="xKey"
-                        tickFormatter={(tick) => {
-                            const date = new Date(tick);
-                            return `${date.getMinutes()}:${("00" + date.getSeconds()).slice(-2)}:${("00" + date.getMilliseconds()).slice(-3, -1)}`;
-                        }}
-                        //ticks={ticks}
-                        //interval={10000}
-                        name="Time" 
-                        domain={
-                            data.length > 0 ? [
-                                data[data.length - 1].xKey - xRange.current,
-                                data[data.length - 1].xKey
-                            ] : [0, 0]
-                        }
-                    />
-                    <YAxis tickFormatter={(tick) => `${tick}${yUnits || ""}`} name="Value"/>
-                    <CartesianGrid strokeDasharray="5 2" />
-                    <Tooltip />
-                </LineChart>
-            </ResponsiveContainer>
+            <SmoothieComponent
+                display="undefined"
+                responsive={true}
+                height={100}
+                millisPerPixel={100}
+                interpolation="bezier"
+                streamDelay={100}
+                grid={{
+                    fillStyle: 'transparent',
+                }}
+                tooltip={true}
+                tooltipLine={{
+                    lineWidth: 2,
+                }}
+                timestampFormatter={(value) => {
+                    const date = new Date(value);
+                    return date.toLocaleTimeString() + ':' + ("00" + date.getMilliseconds()).slice(-3);
+                }}
+                series={[
+                    {
+                        data: line.current,
+                        strokeStyle: '#00ff00',
+                        fillStyle: 'rgba(0, 255, 0, 0.2)',
+                        lineWidth: 2,
+                        label: dataKey,
+                    },
+                ]}
+            />
         </div>
     );
 }
