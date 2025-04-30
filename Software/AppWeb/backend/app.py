@@ -13,8 +13,8 @@ from backend.simulator import get_packet, process_command
 TICK = 0.1  # 100 ms
 
 async def main():
-    async with websockets.serve(websocket_handler, "localhost", 8765):
-        logging.info("WebSocket server started on ws://localhost:8765")
+    async with websockets.serve(websocket_handler, "0.0.0.0", 8765):
+        logging.info("WebSocket server started on ws://0.0.0.0:8765")
         await asyncio.Future()
 
 async def websocket_handler(websocket):

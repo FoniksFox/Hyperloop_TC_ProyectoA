@@ -8,10 +8,11 @@ import Dev from './pages/Dev/Dev'
 
 
 function App() {
+	const wsUrl = `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/`;
 
   	return (
-		<WebSocketProvider url="ws://localhost:8765">
-			<Router basename="/Hyperloop_TC_ProyectoA">
+		<WebSocketProvider url={wsUrl}>
+			<Router basename="/">
 				<Routes>
 					<Route path="/" element={<Home/>} />
 					<Route path="/dev" element={<Dev/>} />
