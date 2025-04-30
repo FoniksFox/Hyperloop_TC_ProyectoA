@@ -1,0 +1,154 @@
+.column-content .console {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    box-sizing: border-box;
+}
+.column-content .console button {
+    padding: 5px;
+    border-radius: 4px;
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+    border: none;
+}
+.column-content .console button:hover {
+    transform: scale(1.03);
+    outline: none;
+    border: none;
+}
+.column-content .console button:active {
+    transform: scale(0.98);
+}
+.column-content .console button:focus {
+    outline: none;
+    animation: fadeOutline 2s forwards;
+}
+@keyframes fadeOutline {
+    0% {
+        box-shadow: 0 0 0 2px rgb(255, 255, 255);
+    } 50% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.747);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    }
+}
+
+.console-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background-color: rgb(53, 50, 53);
+    border-radius: 8px 8px 0px 0px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+}
+.console-indicator {
+    flex: 1;
+}
+.console-header-managers {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+.console-filters {
+    display: inline-block;
+    flex-direction: column;
+}
+.console-filters-content {
+    position: absolute;
+    right: 0px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(53, 50, 53);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 5px;
+}
+.console-filters-content label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    color: #fff;
+    gap: 5px;
+}
+.console-filters-subcontent {
+    display: flex;
+    flex-direction: column;
+    border-left:rgba(0, 0, 0, 0.459) solid;
+}
+
+.console-content {
+    flex: 1;
+    min-width: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: rgb(53, 50, 53) solid;
+    border-width: 0px 3px;
+    background-color: #000000;
+}
+.scroll-helper {
+    max-height: 0px;
+    min-width: 0px;
+}
+.console-content::-webkit-scrollbar {
+    width: 8px;
+}
+.console-content::-webkit-scrollbar-thumb {
+    background-color: rgb(129, 129, 129);
+    border-radius: 4px;
+}
+
+.console-message {
+    word-break: break-word;
+    text-align: left;
+    text-indent: 10px ;
+}
+.console-message.message.data {
+    color: rgb(117, 117, 117);
+}
+.console-message.error {
+    color: rgb(255, 65, 65);
+}
+.console-message.order {
+    color: rgb(129, 255, 103);
+}
+.console-message.connection {
+    color: rgb(244, 67, 250);
+}
+
+.console-sender {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    gap: 10px;
+    background-color: rgb(53, 50, 53);
+    border-radius: 0px 0px 8px 8px;
+}
+.console-input {
+    flex: 1;
+    min-width: 0px;
+    width: 100%;
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    background-color: rgb(53, 50, 53);
+    font-size: 16px;
+}

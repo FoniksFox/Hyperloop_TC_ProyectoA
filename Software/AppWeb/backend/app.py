@@ -26,12 +26,20 @@ async def websocket_handler(websocket):
                 command = await asyncio.wait_for(websocket.recv(), timeout=TICK)
                 logging.info(f"Command: {command}")
                 response = await process_command(command)
-                if response is None:
-                    logging.info("No response generated.")
-                else: 
-                    logging.info(f"Response: {response}")
             except asyncio.TimeoutError:
                 logging.info("Timeout waiting for command") 
+                response = await process_command(json.dumps({"id": "none"}))  # Process command with None to keep the state
+
+            if response is None:
+                logging.info("No response generated.")
+            else: 
+                logging.info(f"Response: {response}")
+                try:
+                    responsePacket = {"id": "response", "data": response}
+                    await websocket.send(json.dumps(responsePacket))
+                except Exception as e:
+                    logging.error(f"Error sending response: {e}")
+                    break
 
             packet = await get_packet()
             try:
