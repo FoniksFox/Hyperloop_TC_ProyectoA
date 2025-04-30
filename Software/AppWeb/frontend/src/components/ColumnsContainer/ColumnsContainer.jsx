@@ -252,6 +252,7 @@ function ColumnsContainer() {
 
     const chartWrapperRef = useRef(null);
     useEffect(() => {
+        if (!chartWrapperRef.current) return;
         const observer = new ResizeObserver(entries => {
             for (let entry of entries) {
                 if (entry.target === chartWrapperRef.current) {
@@ -265,7 +266,10 @@ function ColumnsContainer() {
             }
         });
         observer.observe(chartWrapperRef.current);
-    }, [chartWrapperRef]);
+        return () => {
+            observer.disconnect();
+        }
+    }, [chartWrapperRef, columns]);
     const columnsContent = {
         charts: 
             <div className="chart-wrapper" ref={chartWrapperRef}>
