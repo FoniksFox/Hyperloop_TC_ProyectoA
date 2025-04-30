@@ -250,11 +250,30 @@ function ColumnsContainer() {
         window.addEventListener('mouseup', onMouseUp);
     })
 
+    const chartWrapperRef = useRef(null);
+    useEffect(() => {
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                if (entry.target === chartWrapperRef.current) {
+                    const chartWrapperHeight = entry.contentRect.height;
+                    const newHeight = chartWrapperHeight / 4 - 20 > 0 ? chartWrapperHeight / 4 - 20 : 0;
+                    const charts = document.querySelectorAll('.chart-wrapper .chart');
+                    charts.forEach(chart => {
+                        chart.style.height = `${newHeight}px`;
+                    });
+                }
+            }
+        });
+        observer.observe(chartWrapperRef.current);
+    }, [chartWrapperRef]);
     const columnsContent = {
         charts: 
-            <>
-                <Chart dataKey="voltage" yUnits="V"/>
-            </>,
+            <div className="chart-wrapper" ref={chartWrapperRef}>
+                <Chart dataKey="voltage" yUnits="V" color="#ffff00" minY="0" maxY="500" />
+                <Chart dataKey="current" yUnits="A" color="#00ff00" minY="0" maxY="40" />
+                <Chart dataKey="elevation" yUnits="mm" color="#ff0000" minY="0" maxY="40" />
+                <Chart dataKey="velocity" yUnits="km/h" color="#0000ff" minY="0" maxY="40" />
+            </div>,
         buttons:
             <>
                 <WSButton command="precharge"/>

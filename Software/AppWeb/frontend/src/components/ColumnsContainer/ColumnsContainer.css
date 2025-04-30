@@ -110,3 +110,11 @@
     height: 95%;
     visibility: hidden;
 }
+
+.chart-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

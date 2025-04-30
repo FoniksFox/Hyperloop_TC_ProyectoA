@@ -3,9 +3,12 @@ import { WebSocketContext } from '../../websocket/WebSocketProvider';
 import { useReducer, useContext, useEffect, useCallback, useRef, useState } from 'react';
 import SmoothieComponent, { TimeSeries } from 'react-smoothie';
 
-function Chart( { title, dataKey, yUnits}) {
-    if (!title) {
-        title = dataKey.charAt(0).toUpperCase() + dataKey.slice(1);
+function Chart( { title, dataKey, yUnits, color, height, minY, maxY } ) {
+    if (!title){
+        title = dataKey.charAt(0).toUpperCase() + dataKey.slice(1) + ' (' + yUnits + ')';
+    }
+    if (!color){
+        color = '#00ff00';
     }
     const { isConnected, subscribe} = useContext(WebSocketContext);
 
@@ -29,34 +32,40 @@ function Chart( { title, dataKey, yUnits}) {
 
     return (
         <div className ="chart-container">
-            <h3>{title || "Chart"}</h3>
             <SmoothieComponent
-                display="undefined"
+                className="chart"
+                title={{
+                    text: title || "Chart",
+                    fontSize: 20,
+                    textAlign: 'left',
+                    verticalAlign: 'top',
+                }}
                 responsive={true}
-                height={100}
-                millisPerPixel={100}
-                interpolation="bezier"
+                height={height || 0}
+                millisPerPixel={30}
                 streamDelay={100}
                 grid={{
                     fillStyle: 'transparent',
                 }}
-                tooltip={true}
+                tooltip={false}
                 tooltipLine={{
                     lineWidth: 2,
                 }}
                 timestampFormatter={(value) => {
                     const date = new Date(value);
-                    return date.toLocaleTimeString() + ':' + ("00" + date.getMilliseconds()).slice(-3);
+                    return ('00' + date.getMinutes()).slice(-2) + ':' + ('00' + date.getSeconds()).slice(-2);
                 }}
                 series={[
                     {
                         data: line.current,
-                        strokeStyle: '#00ff00',
-                        fillStyle: 'rgba(0, 255, 0, 0.2)',
+                        strokeStyle: color,
+                        fillStyle: color.replace(/^(#?)([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i, (_, hash, r, g, b) => 
+                            `rgba(${parseInt(r, 16)}, ${parseInt(g, 16)}, ${parseInt(b, 16)}, 0.3)`),
                         lineWidth: 2,
-                        label: dataKey,
                     },
                 ]}
+                minValue={minY}
+                maxValue={maxY}
             />
         </div>
     );
