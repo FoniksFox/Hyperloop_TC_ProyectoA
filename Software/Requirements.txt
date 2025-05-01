@@ -4,9 +4,11 @@
 [X] Desarrollo en React
 [X] Comunicaciones por WebSocket
 [X] Disposición en columnas
-[ ] Gráficas
+[X] Gráficas
 [X] Botones
-[ ] Consola de comandos
+[X] Consola de comandos
+[ ] Página de inicio
+[ ] Iconos
 
 ## Backend
 [X] Comuniaciones por WebSocket
@@ -17,15 +19,13 @@
 
 ## Frontend
 [X] Columnas ajustables
-[ ] Iconos
 [ ] Animaciones
     [X] Desplazamiento de columans
     [ ] Ocultar columnas
     [ ] Otras Animaciones
-[ ] Mejorar las animaciones (técnica Flip?)
+    [ ] Mejorar las animaciones (técnica Flip?)
 [ ] Barra lateral
-[ ] Página de inicio
-[ ] Mejora del CSS (Tailwind?)
+[ ] Mejora del CSS (Tailwind? CSS in JS?)
 [ ] Configuraciones
 [ ] Gadgets
 [ ] Limpiar el código
@@ -36,7 +36,15 @@
 [ ] Limpieza del HTML para mayor accesibilidad
 [ ] Controles mediante teclado
 [ ] Versión móvil
+[ ] Port para desktop
+[ ] Port para móvil
 [ ] Otras páginas
+    [ ] Deformaciones
+    [ ] Tickets
+    [ ] Calendario
+    [ ] Links
+    [ ] Cuentas y facturas
+[ ] Convertir la app en un service manager con toda la logística del equipo integrada
 [ ] Guardar Configuraciones
 
 ## Backend
