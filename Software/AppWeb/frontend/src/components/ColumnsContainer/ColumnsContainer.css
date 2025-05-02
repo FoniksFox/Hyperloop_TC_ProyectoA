@@ -1,5 +1,5 @@
 .columns-container-wrapper {
-    width: auto;
+    flex: 1;
     height: 90%;
     display: flex;
     flex-direction: column;

@@ -1,6 +1,6 @@
 .header {
     background-color: #1b181b;
-    padding: 20px;
+    padding: 0.5em;
     color: white;
     text-align: center;
     display: flex;
@@ -20,8 +20,8 @@ button:hover {
 }
 
 .sidebar-toggle-icon img{
-    width: 50px;
-    height: 50px;
+    width: 3em;
+    height: 3em;
     filter: invert(100%) brightness(100%) contrast(100%);
 }
 
@@ -30,6 +30,7 @@ button:hover {
     flex-grow: 1;
     cursor: pointer;
     transition: 0.5s ease-in-out;
+    font-size: 2em;
 }
 .header-title:hover {
     animation: bounce 0.5s ease-in-out forwards;
