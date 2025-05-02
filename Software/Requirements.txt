@@ -9,6 +9,8 @@
 [X] Consola de comandos
 [ ] Página de inicio
 [ ] Iconos
+[X] Barra lateral
+
 
 ## Backend
 [X] Comuniaciones por WebSocket
@@ -24,7 +26,6 @@
     [ ] Ocultar columnas
     [ ] Otras Animaciones
     [ ] Mejorar las animaciones (técnica Flip?)
-[ ] Barra lateral
 [ ] Mejora del CSS (Tailwind? CSS in JS?)
 [ ] Configuraciones
 [ ] Gadgets
@@ -44,6 +45,7 @@
     [ ] Calendario
     [ ] Links
     [ ] Cuentas y facturas
+    [ ] Logs
 [ ] Convertir la app en un service manager con toda la logística del equipo integrada
 [ ] Guardar Configuraciones
 
