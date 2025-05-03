@@ -7,7 +7,7 @@ function Header({ toggleSidebar }) {
     return (
         <div className="header">
             <button className="sidebar-toggle" onClick={() => toggleSidebar()}>
-                <span className="sidebar-toggle-icon"><img src='./menu-burger.svg' alt="Menu Burger"/></span>
+                <span className="sidebar-toggle-icon"><img src='/menu-burger.svg' alt="Menu Burger"/></span>
             </button>
             <h1 className="header-title" onClick={() => { navigate("/") }}>Hyperloop TC group A</h1>
             <button className="header-tools" onClick={() => {}}>
