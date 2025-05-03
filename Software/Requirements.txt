@@ -7,7 +7,7 @@
 [X] Gráficas
 [X] Botones
 [X] Consola de comandos
-[ ] Página de inicio
+[X] Página de inicio
 [ ] Iconos
 [X] Barra lateral
 
