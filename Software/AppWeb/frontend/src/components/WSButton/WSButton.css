@@ -1,4 +1,5 @@
 .ws-button {
+    min-height: 2em;
     display: flex;
     flex-direction: row;
     align-items: center;
