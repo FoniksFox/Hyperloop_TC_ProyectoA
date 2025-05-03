@@ -1,0 +1,25 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app_frontend
+  
+  reverse_proxy:
+    build: 
+      context: ./reverse_proxy
+      dockerfile: Dockerfile
+    container_name: app_reverse_proxy
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+  
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app_backend
+    ports:
+      - "8000:8000"

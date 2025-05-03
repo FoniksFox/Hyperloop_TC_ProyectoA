@@ -10,8 +10,8 @@ import Dev from './pages/Dev/Dev'
 function App() {
 
   	return (
-		<WebSocketProvider url="ws://localhost:8765">
-			<Router basename="/Hyperloop_TC_ProyectoA">
+		<WebSocketProvider url="ws://localhost/api">
+			<Router basename="/">
 				<Routes>
 					<Route path="/" element={<Home/>} />
 					<Route path="/dev" element={<Dev/>} />
