@@ -46,7 +46,6 @@ function Home() {
                         <div className="button-selector">
                             <WSButton command={buttonCommand || 'precharge'} />
                             <select onChange={(event) => {
-                                console.log(event.target.value);
                                 setButtonCommand(event.target.value);
                                 event.target.value='';
                             }} defaultValue=''>
