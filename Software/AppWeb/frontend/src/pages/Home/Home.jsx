@@ -59,7 +59,11 @@ function Home() {
                                 <option value="discharge">Discharge</option>
                             </select>
                         </div>
-                        <div className="simulation"></div>
+                        <model-viewer className="model" src="/model.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls tone-mapping="neutral" poster="poster.webp" shadow-intensity="1" camera-orbit="119.1deg 76.9deg 3.333m" field-of-view="30deg">
+                            <div className="progress-bar hide" slot="progress-bar">
+                                <div className="update-bar"></div>
+                            </div>
+                        </model-viewer>
                     </div>
                     <div className="content">
                         <div className="chart-wrapper" ref={chartWrapperRef}>
