@@ -55,6 +55,9 @@ function Console() {
                 const id = message.id;
                 if (id) {
                     message = { key: messageKey, type: 'message', id: id, data: message.data, timestamp: timestamp};
+                    if (id === 'data') {
+                        return state; // Ignore response messages
+                    }
                 }
                 let newState = [...state, message];
                 if (newState.length > messagesLimit) {
@@ -85,7 +88,7 @@ function Console() {
     const filtersRef = useRef(null);
     const [filters, setFilters] = useState({ connection: true, message: true, error: true, order: true });
     const messageFiltersRef = useRef(filters);
-    const [messageFilters, setMessageFilters] = useState({ data: true, response: true, other: true });
+    const [messageFilters, setMessageFilters] = useState({ response: true, other: true });
 
     const stringifyMessage = useCallback((message) => {
         let messageString = '-';
@@ -138,10 +141,6 @@ function Console() {
                                 <input type="checkbox" checked={filters.message} onChange={() => setFilters({ ...filters, message: !filters.message })} />
                                 Message
                                 <div className="console-filters-subcontent" ref={messageFiltersRef} style={{ visibility: (filters.message && filtersVisible) ? 'visible' : 'hidden' }}>
-                                    <label>
-                                        <input type="checkbox" checked={messageFilters.data} onChange={() => setMessageFilters({ ...messageFilters, data: !messageFilters.data })} />
-                                        Data
-                                    </label>
                                     <label>
                                         <input type="checkbox" checked={messageFilters.response} onChange={() => setMessageFilters({ ...messageFilters, response: !messageFilters.response })} />
                                         Response
