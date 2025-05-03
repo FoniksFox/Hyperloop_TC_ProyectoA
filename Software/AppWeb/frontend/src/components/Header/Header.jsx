@@ -1,5 +1,4 @@
 import './Header.css';
-import menuBurger from '../../../public/menu-burger.svg';
 import { useNavigate } from 'react-router-dom';
 
 function Header({ toggleSidebar }) {
@@ -8,7 +7,7 @@ function Header({ toggleSidebar }) {
     return (
         <div className="header">
             <button className="sidebar-toggle" onClick={() => toggleSidebar()}>
-                <span className="sidebar-toggle-icon"><img src={menuBurger} alt="Menu Burger"/></span>
+                <span className="sidebar-toggle-icon"><img src='./menu-burger.svg' alt="Menu Burger"/></span>
             </button>
             <h1 className="header-title" onClick={() => { navigate("/") }}>Hyperloop TC group A</h1>
             <button className="header-tools" onClick={() => {}}>
