@@ -46,7 +46,7 @@
     box-sizing: border-box;
 }
 
-.chart-wrapper {
+.content .chart-wrapper {
     box-sizing: border-box;
     flex: 1;
     padding: 1em;
