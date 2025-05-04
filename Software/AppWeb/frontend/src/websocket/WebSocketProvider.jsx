@@ -15,7 +15,9 @@ export const WebSocketProvider = ({ url, children }) => {
     }, []);
 
     const connect = useCallback(() => {
+
         wsRef.current = new WebSocket(url);
+
 
         wsRef.current.onopen = () => {
             //console.log('WebSocket connection established');
@@ -36,7 +38,7 @@ export const WebSocketProvider = ({ url, children }) => {
         };
 
         wsRef.current.onerror = (error) => {
-            console.error('WebSocket error:', error);
+            //console.error('WebSocket error:', error);
             notifySubscribers({ type: 'error', error });
         };
 

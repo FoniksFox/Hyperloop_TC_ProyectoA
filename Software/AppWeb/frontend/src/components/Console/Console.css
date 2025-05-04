@@ -131,17 +131,17 @@
     text-align: left;
     text-indent: 10px ;
 }
-.console-message.message.data {
-    color: rgb(117, 117, 117);
+.console-message.message.internalError {
+    color: rgb(255, 0, 0);
 }
 .console-message.error {
-    color: rgb(255, 65, 65);
+    color: rgb(255, 65, 246);
 }
 .console-message.order {
     color: rgb(129, 255, 103);
 }
 .console-message.connection {
-    color: rgb(244, 67, 250);
+    color: #a200ff;
 }
 
 .console-sender {

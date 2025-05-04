@@ -61,7 +61,7 @@ function Console() {
                 if (id) {
                     message = { key: messageKey, type: 'message', id: id, data: message.data, timestamp: timestamp};
                     if (id === 'data') {
-                        return state; // Ignore response messages
+                        return state; // Ignore data messages
                     }
                 }
                 let newState = [...state, message];
@@ -93,14 +93,14 @@ function Console() {
     const filtersRef = useRef(null);
     const [filters, setFilters] = useState({ connection: true, message: true, error: true, order: true });
     const messageFiltersRef = useRef(filters);
-    const [messageFilters, setMessageFilters] = useState({ response: true, other: true });
+    const [messageFilters, setMessageFilters] = useState({ response: true, internalError: true, other: true });
 
     const stringifyMessage = useCallback((message) => {
         let messageString = '-';
         messageString += message.timestamp ? `[${message.timestamp}] ` : '[?]';
         switch (message.type) {
             case 'connection':
-                messageString += message.status ? 'WebSocket connected' : 'Websocket disconnected';
+                messageString += message.status ? 'WebSocket connected' : 'Websocket not connected';
                 break;
             case 'message':
                 try {
@@ -157,6 +157,10 @@ function Console() {
                                     <label>
                                         <input type="checkbox" checked={messageFilters.response} onChange={() => setMessageFilters({ ...messageFilters, response: !messageFilters.response })} />
                                         Response
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" checked={messageFilters.internalError} onChange={() => setMessageFilters({ ...messageFilters, internalError: !messageFilters.internalError })} />
+                                        Internal Error
                                     </label>
                                     <label>
                                         <input type="checkbox" checked={messageFilters.other} onChange={() => setMessageFilters({ ...messageFilters, other: !messageFilters.other })} />
