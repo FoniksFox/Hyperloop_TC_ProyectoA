@@ -1,4 +1,4 @@
-.column-content .console {
+.console {
     width: 100%;
     flex: 1;
     display: flex;
@@ -6,21 +6,21 @@
     min-width: 0;
     box-sizing: border-box;
 }
-.column-content .console button {
+.console button {
     padding: 5px;
     border-radius: 4px;
     transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
     border: none;
 }
-.column-content .console button:hover {
+.console button:hover {
     transform: scale(1.03);
     outline: none;
     border: none;
 }
-.column-content .console button:active {
+.console button:active {
     transform: scale(0.98);
 }
-.column-content .console button:focus {
+.console button:focus {
     outline: none;
     animation: fadeOutline 2s forwards;
 }
@@ -49,6 +49,14 @@
 }
 .console-indicator {
     flex: 1;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+.console-indicator .console-icon {
+    margin-right: 5px;
+    margin-left: 10px;
+    transition: color 0.2s ease-in-out;
 }
 .console-header-managers {
     display: flex;
@@ -56,6 +64,10 @@
     justify-content: flex-end;
     align-items: center;
     gap: 5px;
+}
+.console-icon {
+    height: 1.5em;
+    width: 1.5em;
 }
 .console-filters {
     display: inline-block;
@@ -119,17 +131,17 @@
     text-align: left;
     text-indent: 10px ;
 }
-.console-message.message.data {
-    color: rgb(117, 117, 117);
+.console-message.message.internalError {
+    color: rgb(255, 0, 0);
 }
 .console-message.error {
-    color: rgb(255, 65, 65);
+    color: rgb(255, 65, 246);
 }
 .console-message.order {
     color: rgb(129, 255, 103);
 }
 .console-message.connection {
-    color: rgb(244, 67, 250);
+    color: #a200ff;
 }
 
 .console-sender {
@@ -143,7 +155,7 @@
     border-radius: 0px 0px 8px 8px;
 }
 .console-input {
-    flex: 1;
+    flex: 5;
     min-width: 0px;
     width: 100%;
     padding: 5px;
@@ -151,4 +163,10 @@
     border-radius: 4px;
     background-color: rgb(53, 50, 53);
     font-size: 16px;
+}
+.console-send-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }

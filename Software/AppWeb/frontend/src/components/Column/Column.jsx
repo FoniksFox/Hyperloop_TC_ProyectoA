@@ -1,4 +1,6 @@
 import './Column.css';
+import ReorderIcon from '../../assets/move.svg?react';
+import HideIcon from '../../assets/x.svg?react';
 
 function Column({ onToggleVisibility, onReorder, id, className, header, children }) {
     if (!className) className = id;
@@ -7,8 +9,12 @@ function Column({ onToggleVisibility, onReorder, id, className, header, children
         <div className={`column ${className}`}>
             <div className="column-header">
                 <div className="column-header-managers">
-                    <div className="reorder" onMouseDown={(event) => onReorder(event, id)}>Reorder</div>
-                    <button className="toggle" onClick={() => onToggleVisibility(id)}>Hide</button>
+                    <div className="reorder" onMouseDown={(event) => onReorder(event, id)}>
+                        <ReorderIcon className="column-icon" />
+                    </div>
+                    <button className="toggle" onClick={() => onToggleVisibility(id)}>
+                        <HideIcon className="column-icon" />
+                    </button>
                 </div>
                 <h2 className="column-header-title">{header}</h2>
             </div>

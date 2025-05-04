@@ -1,13 +1,13 @@
 .header {
     background-color: #1b181b;
-    padding: 20px;
+    padding: 0.5em;
     color: white;
     text-align: center;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 1em;
     box-shadow: 0em 0.5em 1em rgba(248, 50, 255, 0.479);
 }
 
@@ -19,17 +19,50 @@ button:hover {
     transform: scale(1.1);
 }
 
-.sidebar-toggle-icon img{
-    width: 50px;
-    height: 50px;
-    filter: invert(100%) brightness(100%) contrast(100%);
+.header button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+    border: none;
+    padding: 0.5em;
+    background-color: rgb(53, 50, 53);
 }
+.header button:hover {
+    transform: scale(1.07);
+    outline: none;
+    border: none;
+}
+.header button:active {
+    transform: scale(0.95);
+}
+.header button:focus {
+    outline: none;
+    animation: fadeOutline 2s forwards;
+}
+@keyframes fadeOutline {
+    0% {
+        box-shadow: 0 0 0 2px rgb(255, 255, 255);
+    } 50% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.747);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    }
+}
+.sidebar-icon {
+    height: 3em;
+    width: 3em;
+}
+    
 
 .header-title {
     font-weight: bold;
     flex-grow: 1;
     cursor: pointer;
     transition: 0.5s ease-in-out;
+    font-size: 2em;
+    margin: 0 2em;
 }
 .header-title:hover {
     animation: bounce 0.5s ease-in-out forwards;

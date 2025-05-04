@@ -1,21 +1,23 @@
 import './Header.css';
-import menuBurger from '../../../public/menu-burger.svg';
 import { useNavigate } from 'react-router-dom';
+import SidebarIcon from '../../assets/sidebar.svg?react';
+import ConfIcon from '../../assets/settings.svg?react';
+import ToolsIcon from '../../assets/tool.svg?react';
 
-function Header() {
+function Header({ toggleSidebar }) {
     const navigate = useNavigate();
 
     return (
         <div className="header">
-            <button className="sidebar-toggle" onClick={() => {}}>
-                <span className="sidebar-toggle-icon"><img src={menuBurger} alt="Menu Burger"/></span>
+            <button className="sidebar-toggle" onClick={() => toggleSidebar()}>
+                <SidebarIcon className="sidebar-icon"/>
             </button>
             <h1 className="header-title" onClick={() => { navigate("/") }}>Hyperloop TC group A</h1>
             <button className="header-tools" onClick={() => {}}>
-                <span className="header-tools-icon">Tools</span>
+                <ToolsIcon className="sidebar-icon"/>
             </button>
             <button className="header-settings" onClick={() => {}}>
-                <span className="header-settings-icon">Settings</span>
+                <ConfIcon className="sidebar-icon"/>
             </button>
         </div>
     )
