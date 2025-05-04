@@ -52,7 +52,3 @@
 ## Backend
 [ ] Órdenes con parametros (sintaxis? Mandar JSONs?)
 [ ] Guardar logs
-
-
-# Attribution
-Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
