@@ -1,6 +1,8 @@
 import './Sidebar.css';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import HomeIcon from '../../assets/home.svg?react';
+import DevIcon from '../../assets/terminal.svg?react';
+import ConfIcon from '../../assets/settings.svg?react';
 
 function Sidebar({ isActive }) {
     const navigate = useNavigate();
@@ -10,15 +12,15 @@ function Sidebar({ isActive }) {
             <div className="sidebar">
             <ul className="sidebar-group links">
                 <li className="sidebar-item" onClick={() => { navigate("/") }}>
-                    <span className="sidebar-item-icon">🏠</span>
+                    <HomeIcon className="sidebar-item-icon"/>
                 </li>
                 <li className="sidebar-item" onClick={() => { navigate("/dev") }}>
-                    <span className="sidebar-item-icon">📁</span>
+                    <DevIcon className="sidebar-item-icon"/>
                 </li>
             </ul>
             <ul className="sidebar-group tools">
                 <li className="sidebar-item" onClick={() => {}}>
-                    <span className="sidebar-item-icon">⚙️</span>
+                    <ConfIcon className="sidebar-item-icon"/>
                 </li>
             </ul>
         </div>

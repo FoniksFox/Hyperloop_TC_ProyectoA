@@ -27,12 +27,12 @@
 }
 .column-header-managers {
     font-weight: 300;
-    padding: 0px 5%;
+    padding: 0px 0.2em;
     height: 30px;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    gap: 5%;
+    gap: 0.5em;
     align-items: center;
 }
 .reorder {
@@ -41,6 +41,9 @@
     padding: 0px;
     margin: 0px;
     transition: scale 0.1s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .reorder:hover {
     scale: 1.1;
@@ -54,6 +57,9 @@
     padding: 0px;
     margin: 0px;
     transition: scale 0.1s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .toggle:hover {
     scale: 1.1;
@@ -71,4 +77,9 @@
     justify-content: flex-start;
     gap: 5%;
     padding: 20px 0px;
+}
+
+.column-icon {
+    height: 1.2em;
+    width: 1.2em;
 }

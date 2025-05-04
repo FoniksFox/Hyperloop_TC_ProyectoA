@@ -8,7 +8,7 @@
 [X] Botones
 [X] Consola de comandos
 [X] Página de inicio
-[ ] Iconos
+[X] Iconos
 [X] Barra lateral
 
 

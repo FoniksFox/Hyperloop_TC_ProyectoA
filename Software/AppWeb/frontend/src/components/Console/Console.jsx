@@ -1,4 +1,9 @@
 import './Console.css';
+import ClearIcon from '../../assets/trash.svg?react';
+import ConnectIcon from '../../assets/activity.svg?react';
+import FilterIcon from '../../assets/filter.svg?react';
+import SendIcon from '../../assets/send.svg?react';
+import IndicatorIcon from '../../assets/more-horizontal.svg?react';
 import { useState, useReducer, useContext, useRef, useCallback, useEffect } from 'react';
 import { WebSocketContext } from '../../websocket/WebSocketProvider';
 
@@ -22,11 +27,11 @@ function Console() {
     });
     const getStatus = useCallback(() => {
         if (!isSubscribed) {
-            return 'Nay';
+            return 'red';
         } else if (!isConnected) {
-            return 'Yay';
+            return 'yellow';
         } else {
-            return 'Yeah';
+            return 'green';
         }
     }, [isSubscribed, isConnected]);
 
@@ -126,12 +131,20 @@ function Console() {
     return (
         <div className="console">
             <div className="console-header">
-                <div className="console-indicator">{getStatus()}</div>
+                <div className="console-indicator">
+                    <IndicatorIcon className="console-icon" color={getStatus()} />
+                </div>
                 <div className="console-header-managers">
-                    <button className="console-clear" onClick={() => dispatch({ type: 'clear' })}>Cl</button>
-                    <button className="console-connect" onClick={toggleSubscription}>S</button>
+                    <button className="console-connect" onClick={toggleSubscription}>
+                        <ConnectIcon className="console-icon" />
+                    </button>
+                    <button className="console-clear" onClick={() => dispatch({ type: 'clear' })}>
+                        <ClearIcon className="console-icon" />
+                    </button>
                     <div className="console-filters">
-                        <button className="console-config" onClick={() => setFiltersVisible(!filtersVisible)}>F</button>
+                        <button className="console-config" onClick={() => setFiltersVisible(!filtersVisible)}>
+                            <FilterIcon className="console-icon" />
+                        </button>
                         <div className="console-filters-content" ref={filtersRef} style={{ visibility: filtersVisible ? 'visible' : 'hidden' }}>
                             <label>
                                 <input type="checkbox" checked={filters.connection} onChange={() => setFilters({ ...filters, connection: !filters.connection })} />
@@ -192,7 +205,9 @@ function Console() {
                         }
                     }}
                 />
-                <button className="console-send-button" onClick={() => {sendOrder(inputRef.current.value); inputRef.current.value='';}}>Send</button>
+                <button className="console-send-button" onClick={() => {sendOrder(inputRef.current.value); inputRef.current.value='';}}>
+                    <SendIcon className="console-icon" />
+                </button>
             </div>
         </div>
     )

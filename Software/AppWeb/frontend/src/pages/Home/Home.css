@@ -36,6 +36,42 @@
     display: flex;
     flex-direction: row;
     gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+.button-sector button {
+    height: 100%;
+}
+.button-selector select {
+    background-color: rgb(53, 50, 53);
+    height: 100%;
+    border: none;
+    padding: 0.3em;
+    border-radius: 0.5em;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: scale 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+}
+.button-selector select:hover {
+    scale: 1.03;
+    outline: none;
+    border: none;
+}
+.button-selector select:focus {
+    outline: none;
+    animation: fadeOutline 2s forwards;
+}
+@keyframes fadeOutline {
+    0% {
+        box-shadow: 0 0 0 2px rgb(255, 255, 255);
+    }
+    50% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.747);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0);
+    }
 }
 
 .model {

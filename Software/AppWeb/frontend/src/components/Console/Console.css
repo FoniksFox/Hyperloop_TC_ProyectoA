@@ -49,6 +49,14 @@
 }
 .console-indicator {
     flex: 1;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+.console-indicator .console-icon {
+    margin-right: 5px;
+    margin-left: 10px;
+    transition: color 0.2s ease-in-out;
 }
 .console-header-managers {
     display: flex;
@@ -56,6 +64,10 @@
     justify-content: flex-end;
     align-items: center;
     gap: 5px;
+}
+.console-icon {
+    height: 1.5em;
+    width: 1.5em;
 }
 .console-filters {
     display: inline-block;
@@ -143,7 +155,7 @@
     border-radius: 0px 0px 8px 8px;
 }
 .console-input {
-    flex: 1;
+    flex: 5;
     min-width: 0px;
     width: 100%;
     padding: 5px;
@@ -151,4 +163,10 @@
     border-radius: 4px;
     background-color: rgb(53, 50, 53);
     font-size: 16px;
+}
+.console-send-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
