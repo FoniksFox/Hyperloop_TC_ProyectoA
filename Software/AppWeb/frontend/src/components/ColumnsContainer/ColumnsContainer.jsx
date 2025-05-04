@@ -249,6 +249,15 @@ function ColumnsContainer() {
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mouseup', onMouseUp);
     })
+    
+    const [buttons, setButtons] = useState([
+        'precharge',
+        'start levitation',
+        'start motor',
+        'stop motor',
+        'stop levitation',
+        'discharge',
+    ]);
 
     const chartWrapperRef = useRef(null);
     useEffect(() => {
@@ -280,12 +289,8 @@ function ColumnsContainer() {
             </div>,
         buttons:
             <>
-                <WSButton command="precharge"/>
-                <WSButton command="start levitation"/>
-                <WSButton command="start motor"/>
-                <WSButton command="stop motor"/>
-                <WSButton command="stop levitation"/>
-                <WSButton command="discharge"/>
+                
+                {buttons.map((button, index) => <WSButton key={index} command={button}/>)}
             </>,
         console: 
             <>
