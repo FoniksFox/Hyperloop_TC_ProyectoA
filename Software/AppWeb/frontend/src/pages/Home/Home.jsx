@@ -1,5 +1,5 @@
 import './Home.css';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 import Header from '../../components/Header/Header.jsx';
 import Sidebar from '../../components/Sidebar/Sidebar.jsx';
@@ -36,6 +36,76 @@ function Home() {
 
     const [buttonCommand, setButtonCommand] = useState('');
 
+    const onProgress = useCallback((event) => {
+        const progressBar = event.target.querySelector('.progress-bar');
+        const updatingBar = event.target.querySelector('.update-bar');
+        updatingBar.style.width = `${event.detail.totalProgress * 100}%`;
+        if (event.detail.totalProgress === 1) {
+          progressBar.classList.add('hide');
+          event.target.removeEventListener('progress', onProgress);
+        } else {
+          progressBar.classList.remove('hide');
+        }
+      }, []);
+    useEffect(() => {
+      document.querySelector('model-viewer')?.addEventListener('progress', onProgress);
+        return () => {
+            document.querySelector('model-viewer')?.removeEventListener('progress', onProgress);
+            }
+    }, [onProgress]);
+    /*
+    const animateModel = useCallback((position) => {
+        const modelViewer = document.querySelector('model-viewer');
+
+        // Wait for the model to load
+        modelViewer.addEventListener('load', () => {
+            const model = modelViewer.model; // Access the loaded 3D model
+            console.log('Model loaded:', model);
+            if (!model) {
+                console.error('Model is undefined');
+                return;
+            }
+
+            // Retrieve all symbols of the model
+            const symbols = Object.getOwnPropertySymbols(model);
+            console.log('Symbols in model:', symbols);
+
+            // Find the Symbol(hierarchy)
+            const symbol = symbols.find((sym) => sym.toString() === 'Symbol(roots)');
+
+            if (!symbol) {
+                console.error('Symbol not found');
+                return;
+            }
+
+            // Access the hierarchy using the symbol
+            const roots = model[symbol];
+            console.log('Model roots:', roots);
+
+            if (!roots) {
+                console.error('Roots is undefined');
+                return;
+            }
+
+            // Find the part by name in the hierarchy
+            const movedPiece = roots.find((node) => {
+                return node.name === 'SoporteConMovSTEP-1';
+            }); // Replace with the actual name of the part
+            console.log('Moved piece:', movedPiece);
+            if (movedPiece !== undefined) {
+                console.log('Moved piece found:', movedPiece);
+                // Update the position of the part
+                movedPiece.position.set(position.x, position.y, position.z);
+            } else {
+                console.error('Moved piece not found in the hierarchy');
+            }
+        });
+    }, []);
+    useEffect(() => {
+        animateModel({ x: 0, y: 0, z: 0 });
+    }, [animateModel]);
+    */
+
     return (
         <div className="home">
             <Header toggleSidebar={() => toggleSidebar()}/>       
@@ -58,7 +128,7 @@ function Home() {
                                 <option value="discharge">Discharge</option>
                             </select>
                         </div>
-                        <model-viewer className="model" src="/model.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls tone-mapping="neutral" poster="poster.webp" shadow-intensity="1" camera-orbit="119.1deg 76.9deg 3.333m" field-of-view="30deg">
+                        <model-viewer src="model.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls tone-mapping="neutral" poster="poster.webp" shadow-intensity="1" camera-orbit="117.6deg 75.69deg 3.333m" field-of-view="30deg">
                             <div className="progress-bar hide" slot="progress-bar">
                                 <div className="update-bar"></div>
                             </div>
